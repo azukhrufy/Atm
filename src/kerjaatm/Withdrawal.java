@@ -37,8 +37,13 @@ public class Withdrawal extends Transaction {
       getBankDatabase().debit(getAccountNumber(),amount);
       }
       else {
-          screen.displayMessageLine("Gagal Withdraw karena Balance pada Akun anda tidak mencukupi");
-      }
+          if(amount != 0){
+                            screen.displayMessageLine("Gagal Withdraw karena Balance pada Akun anda tidak mencukupi");
+                         }
+          else {
+              screen.displayMessageLine("Membatalkan....");
+          }
+          }
    } 
 
    // display a menu of withdrawal amounts and the option to cancel;
