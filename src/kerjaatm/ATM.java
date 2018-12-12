@@ -70,14 +70,15 @@ public class ATM {
    }
 
    // attempts to authenticate user against database
-   private void authenticateUser() {
+    private void authenticateUser() {
        int tries = 0;
         while(true) {
             screen.displayMessage("\nPlease enter your account number : ");
             int accountNumber = keypad.getInput();
+          if(accountNumber>999 && accountNumber<10000){
             screen.displayMessage("\nEnter your PIN : ");
             int pin = keypad.getInput();
-       
+                if(pin>999 && pin<10000){
             userAuthenticated = bankDatabase.authenticateUser(accountNumber, pin);
        
             if(userAuthenticated){
@@ -93,8 +94,17 @@ public class ATM {
                 screen.displayMessageLine("Your bank account is blocked!");
                 System.exit(0);
             }
+          }
+          else
+          {
+              screen.displayMessageLine("PIN must be 4 digits, you directed to input account Number again");
+          }
+          } else
+          {
+              screen.displayMessageLine("Account number must be 4 digits");
+          }
         }
-   } 
+   }  
 
    // display the main menu and perform transactions
    private void performTransactions() {
