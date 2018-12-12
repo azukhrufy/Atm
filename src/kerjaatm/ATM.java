@@ -146,9 +146,11 @@ public class ATM {
                 
                  currentTransaction =
                          createTransaction(mainMenuSelection);
-                 
-                 currentTransaction.execute();
-                 break;
+                 if(currentTransaction != createTransaction(0)){
+                    System.out.println("test");
+                    currentTransaction.execute();
+                }
+                break;
              case BELIPULSA:
                  currentTransaction =
                          createTransaction(mainMenuSelection);
@@ -285,14 +287,14 @@ public class ATM {
                     temp = new TransferBanyak(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot);
                     break;
                 case 0: // user chose to terminate session
-               screen.displayMessageLine("\nExiting the system...");
+               screen.displayMessageLine("\nExiting..");
                break;
                 default: // 
                screen.displayMessageLine(
                   "\nYou did not enter a valid selection. Try again.");
                break;
-            }break;
-             
+            }
+            break; 
          case BELIPULSA:
              temp = new Bayar_Pulsa(currentAccountNumber, screen, bankDatabase, keypad);
              break;
@@ -349,7 +351,7 @@ public class ATM {
                     temp = new EcommerceScreen(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot, eCommerce);
                     break;
                 case 0: // user chose to terminate session
-               screen.displayMessageLine("\nExiting the system...");
+               screen.displayMessageLine("\nExiting..");
                break;
                 default: // 
                screen.displayMessageLine(
