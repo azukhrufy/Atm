@@ -32,13 +32,19 @@ public class Withdrawal extends Transaction {
    @Override
    public void execute() {
       amount = displayMenuOfAmounts();
+      if(amount<getBankDatabase().getAvailableBalance(getAccountNumber())){
+      screen.displayMessageLine("Akun anda "+getAccountNumber()+" Berhasil di Withdraw sebesar $" + amount);
       getBankDatabase().debit(getAccountNumber(),amount);
+      }
+      else {
+          screen.displayMessageLine("Gagal Withdraw karena Balance pada Akun anda tidak mencukupi");
+      }
    } 
 
    // display a menu of withdrawal amounts and the option to cancel;
    // return the chosen amount or 0 if the user chooses to cancel
    private int displayMenuOfAmounts() {
-      int userChoice = 0; // local variable to store return value
+      int userChoice = 99; // local variable to store return value
 
       Screen screen = getScreen(); // get screen reference
       
@@ -46,7 +52,7 @@ public class Withdrawal extends Transaction {
       int[] amounts = {0, 20, 40, 60, 100, 200};
 
       // loop while no valid choice has been made
-      while (userChoice == 0) {
+      while (userChoice == 99) {
          // display the withdrawal menu
          screen.displayMessageLine("\nWithdrawal Menu:");
          screen.displayMessageLine("1 - $20");
