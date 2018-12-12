@@ -30,11 +30,13 @@ public class TransferBanyak extends Transaction {
       Screen screen = getScreen();
       screen.displayMessage("Masukkan jumlah rekening yang akan anda kirim :");
       int jumkir = keypad.getInput();
+      if(jumkir>1){
       int[] tujuans = new int[jumkir];
       int i = 0;
       while(i<jumkir){
           screen.displayMessage("Masukkan nomor rekening tujuan ke["+i+"] :");
           int tujuan = keypad.getInput();
+          if(tujuan>999 && tujuan<10000){
      if(getBankDatabase().accountexist(tujuan) == true){
          tujuans[i] = tujuan;
        i++;
@@ -42,9 +44,14 @@ public class TransferBanyak extends Transaction {
      else {
          screen.displayMessageLine("Nomor rekening tujuan tidak valid");
      }
+     }
+          else{
+              screen.displayMessageLine("Akun harus merupakan 4 digit angka");
+          }
       }
       i=0;
       transferamount = jumlahTransfer();
+      if(transferamount>0){
       if(getBankDatabase().getAvailableBalance(getAccountNumber()) > transferamount*tujuans.length){
     while(i < tujuans.length){
            getBankDatabase().transfer(getAccountNumber(), transferamount,tujuans[i]);
@@ -54,6 +61,14 @@ public class TransferBanyak extends Transaction {
     }
       else{
            screen.displayMessageLine("Saldo tidak mencukupi..");
+      }
+      }
+      else{
+          screen.displayMessageLine("Hanya dapat mengirim lebih dari $0");
+      }
+      }
+      else{
+          screen.displayMessageLine("Harus mengirim pada lebih dari 1 Akun");
       }
    } 
    private double jumlahTransfer(){
