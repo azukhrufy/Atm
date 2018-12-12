@@ -37,8 +37,10 @@ public class Transfer extends Transaction {
       Screen screen = getScreen();
       screen.displayMessage("Masukkan nomor rekening tujuan anda :");
       int tujuan = keypad.getInput();
+    if(tujuan>999 && tujuan<10000){
        if(getBankDatabase().accountexist(tujuan) == true){
        transferamount = jumlahTransfer();
+     if(transferamount>0){
        if(getBankDatabase().getAvailableBalance(getAccountNumber()) > transferamount){
            getBankDatabase().transfer(getAccountNumber(), transferamount,tujuan);
            screen.displayMessageLine("Transfer sebesar "+transferamount+" pada Akun "+tujuan+" Telah berhasil");
@@ -58,9 +60,17 @@ public class Transfer extends Transaction {
            screen.displayMessageLine("Saldo tidak mencukupi..");
        }
      }
+     else{
+         screen.displayMessageLine("Jumlah transfer tidak boleh dibawah 0");
+     }
+     }
      else {
          screen.displayMessageLine("Nomor rekening tujuan tidak valid");
      }
+    }
+    else {
+        screen.displayMessageLine("Nomor rekening tujuan harus 4 digit");
+    }
    } 
    private double jumlahTransfer(){
        Screen screen = getScreen(); // get reference to screen
