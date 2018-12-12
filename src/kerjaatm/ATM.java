@@ -147,7 +147,7 @@ public class ATM {
                  currentTransaction =
                          createTransaction(mainMenuSelection);
                  if(currentTransaction != createTransaction(0)){
-                    System.out.println("test");
+                    
                     currentTransaction.execute();
                 }
                 break;
@@ -195,7 +195,7 @@ public class ATM {
                 currentTransaction = 
                 createTransaction(mainMenuSelection);
                 if(currentTransaction != createTransaction(0)){
-                    System.out.println("test");
+                    
                     currentTransaction.execute();
                 }
                 break;
