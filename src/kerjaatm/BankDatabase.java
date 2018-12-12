@@ -69,12 +69,14 @@ public class BankDatabase {
        getAccount(userAccountNumber).belipulsa(amount);
    }
    public void transfer(int userAccountNumber,double amount,int targetAccountNumber){
+       if(amount>0){
        Account a = getAccount(userAccountNumber);
        Account b = getAccount(targetAccountNumber);
        if(b!= null){
            a.debit(amount);
            b.credit(amount);
        }
+     }
    }
    public boolean accountexist(int userAccountNumber){
        if(getAccount(userAccountNumber) != null){
