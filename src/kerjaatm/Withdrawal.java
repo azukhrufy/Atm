@@ -32,7 +32,7 @@ public class Withdrawal extends Transaction {
    @Override
    public void execute() {
       amount = displayMenuOfAmounts();
-      if(amount<getBankDatabase().getAvailableBalance(getAccountNumber())){
+      if(amount<getBankDatabase().getAvailableBalance(getAccountNumber()) && amount != 0){
       screen.displayMessageLine("Akun anda "+getAccountNumber()+" Berhasil di Withdraw sebesar $" + amount);
       getBankDatabase().debit(getAccountNumber(),amount);
       }
