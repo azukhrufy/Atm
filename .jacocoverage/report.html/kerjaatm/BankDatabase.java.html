@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>BankDatabase.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;KerjaAtm&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">kerjaatm</a> &gt; <span class="el_source">BankDatabase.java</span></div><h1>BankDatabase.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package kerjaatm;
+
+/**
+ *
+ * @author Acer
+ */
+public class BankDatabase {
+   private Account[] accounts; // array of Accounts
+   
+<span class="nc" id="L15">   public BankDatabase() {</span>
+<span class="nc" id="L16">      accounts = new Account[5]; // just 2 accounts for testing</span>
+<span class="nc" id="L17">      accounts[0] = new Account(1234, 4321, 1000.0, 1200.0);</span>
+<span class="nc" id="L18">      accounts[1] = new Account(8765, 5678, 200.0, 200.0);  </span>
+<span class="nc" id="L19">      accounts[2] = new Account(2222, 3434, 5000.0, 5000.0);</span>
+<span class="nc" id="L20">      accounts[3] = new Account(3231, 3536, 2000.0, 2200.0);</span>
+<span class="nc" id="L21">      accounts[4] = new Account(1244, 7655, 1000.0, 1000.0);</span>
+<span class="nc" id="L22">   }</span>
+   
+   private Account getAccount(int accountNumber) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">       for(int i=0;i&lt;accounts.length;i++){</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">           if(accounts[i].getAccountNumber() == accountNumber){</span>
+<span class="nc" id="L27">               return accounts[i];</span>
+           }
+       }
+<span class="nc" id="L30">      return null; // if no matching account was found, return null</span>
+   } 
+   /* Tambahan &lt;-------------------------*/
+   public void resetLimit(){
+<span class="nc bnc" id="L34" title="All 2 branches missed.">       for(int i=0;i&lt;2;i++){</span>
+<span class="nc" id="L35">           accounts[i].resetLimit();</span>
+       }
+<span class="nc" id="L37">   }</span>
+    /* Tambahan &lt;-------------------------*/
+
+   public boolean authenticateUser(int userAccountNumber, int userPIN) {
+      // attempt to retrieve the account with the account number
+<span class="nc" id="L42">      Account userAccount = getAccount(userAccountNumber);</span>
+
+      // if account exists, return result of Account method validatePIN
+<span class="nc bnc" id="L45" title="All 2 branches missed.">      if (userAccount != null) {</span>
+<span class="nc" id="L46">         return userAccount.validatePIN(userPIN);</span>
+      }
+      else {
+<span class="nc" id="L49">         return false; // account number not found, so return false</span>
+      }
+   } 
+
+   public double getAvailableBalance(int userAccountNumber) {
+<span class="nc" id="L54">      return getAccount(userAccountNumber).getAvailableBalance();</span>
+   } 
+
+   public double getTotalBalance(int userAccountNumber) {
+<span class="nc" id="L58">      return getAccount(userAccountNumber).getTotalBalance();</span>
+   } 
+
+   public void credit(int userAccountNumber, double amount) {
+<span class="nc" id="L62">      getAccount(userAccountNumber).credit(amount);</span>
+<span class="nc" id="L63">   }</span>
+
+   public void debit(int userAccountNumber, double amount) {
+<span class="nc" id="L66">      getAccount(userAccountNumber).debit(amount);</span>
+<span class="nc" id="L67">   } </span>
+   public void belipulsa(int userAccountNumber,double amount){
+<span class="nc" id="L69">       getAccount(userAccountNumber).belipulsa(amount);</span>
+<span class="nc" id="L70">   }</span>
+   public void transfer(int userAccountNumber,double amount,int targetAccountNumber){
+<span class="nc" id="L72">       Account a = getAccount(userAccountNumber);</span>
+<span class="nc" id="L73">       Account b = getAccount(targetAccountNumber);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">       if(b!= null){</span>
+<span class="nc" id="L75">           a.debit(amount);</span>
+<span class="nc" id="L76">           b.credit(amount);</span>
+       }
+<span class="nc" id="L78">   }</span>
+   public boolean accountexist(int userAccountNumber){
+<span class="nc bnc" id="L80" title="All 2 branches missed.">       if(getAccount(userAccountNumber) != null){</span>
+<span class="nc" id="L81">           return true;</span>
+       }
+       else {
+<span class="nc" id="L84">           return false;</span>
+       }
+   }
+   
+   /* Tambahan &lt;-------------------------*/
+<span class="nc" id="L89">    public void setLimit(int userAccountNumber, double amount){ getAccount(userAccountNumber).setLimit(amount); }</span>
+
+<span class="nc" id="L91">    public double getLimit(int userAccountNumber) { return getAccount(userAccountNumber).getLimit(); }</span>
+
+<span class="nc" id="L93">    public void addHistory(int userAccountNumber, String word) { getAccount(userAccountNumber).addHistory(word); }</span>
+
+<span class="nc" id="L95">    public void showHistory(int userAccountNumber) { getAccount(userAccountNumber).showHistory(); }</span>
+    /* Tambahan &lt;-------------------------*/
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

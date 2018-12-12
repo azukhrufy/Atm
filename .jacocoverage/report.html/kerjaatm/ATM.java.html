@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ATM.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;KerjaAtm&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">kerjaatm</a> &gt; <span class="el_source">ATM.java</span></div><h1>ATM.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package kerjaatm;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ *
+ * @author Acer
+ */
+public class ATM {
+   private boolean userAuthenticated; // whether user is authenticated
+   private int currentAccountNumber; // current user's account number
+   private Screen screen; // ATM's screen
+   private Keypad keypad; // ATM's keypad
+   private CashDispenser cashDispenser; // ATM's cash dispenser
+   private BankDatabase bankDatabase; // account information database
+   private DepositSlot depositSlot;
+   private PembayaranEcommerce eCommerce;
+   
+   
+   public String dateNow;
+
+   // constants corresponding to main menu options
+   private static final int BALANCE_INQUIRY = 1;
+   private static final int WITHDRAWAL = 2;
+   private static final int DEPOSIT = 3;
+   private static final int TRANSFER = 4;
+   private static final int BELIPULSA = 5;
+   private static final int MATAUANG = 6;
+   private static final int PEMBAYARANASURANSI =7;
+   private static final int PEMBAYARANTIKETPESAWAT =8;
+   private static final int PEMBAYARANECOMMERCE =9;
+//   private static final int TRANSFERBANYAK = 10;
+   private static final int ANOTHER_PAYMENT = 11;
+   private static final int HISTORY = 12;
+   private static final int EXIT = 13;
+
+   // no-argument ATM constructor initializes instance variables
+<span class="nc" id="L44">   public ATM() {</span>
+<span class="nc" id="L45">      userAuthenticated = false; // user is not authenticated to start</span>
+<span class="nc" id="L46">      currentAccountNumber = 0; // no current account number to start</span>
+<span class="nc" id="L47">      screen = new Screen(); // create screen</span>
+<span class="nc" id="L48">      keypad = new Keypad(); // create keypad </span>
+<span class="nc" id="L49">      cashDispenser = new CashDispenser(); // create cash dispenser</span>
+<span class="nc" id="L50">      bankDatabase = new BankDatabase();// create acct info database</span>
+<span class="nc" id="L51">      depositSlot = new DepositSlot();</span>
+<span class="nc" id="L52">      eCommerce = new PembayaranEcommerce();</span>
+<span class="nc" id="L53">   }</span>
+
+   // start ATM 
+   public void run() {
+      // welcome and authenticate user; perform transactions
+      while (true) {
+         // loop while user is not yet authenticated
+<span class="nc bnc" id="L60" title="All 2 branches missed.">         while (!userAuthenticated) {</span>
+<span class="nc" id="L61">            screen.displayMessageLine(&quot;\nWelcome!&quot;);       </span>
+<span class="nc" id="L62">            authenticateUser(); // authenticate user</span>
+         }
+         
+<span class="nc" id="L65">         performTransactions(); // user is now authenticated</span>
+<span class="nc" id="L66">         userAuthenticated = false; // reset before next ATM session</span>
+<span class="nc" id="L67">         currentAccountNumber = 0; // reset before next ATM session</span>
+<span class="nc" id="L68">         screen.displayMessageLine(&quot;\nThank you! Goodbye!&quot;);              </span>
+      }
+   }
+
+   // attempts to authenticate user against database
+   private void authenticateUser() {
+<span class="nc" id="L74">       int tries = 0;</span>
+        while(true) {
+<span class="nc" id="L76">            screen.displayMessage(&quot;\nPlease enter your account number : &quot;);</span>
+<span class="nc" id="L77">            int accountNumber = keypad.getInput();</span>
+<span class="nc" id="L78">            screen.displayMessage(&quot;\nEnter your PIN : &quot;);</span>
+<span class="nc" id="L79">            int pin = keypad.getInput();</span>
+       
+<span class="nc" id="L81">            userAuthenticated = bankDatabase.authenticateUser(accountNumber, pin);</span>
+       
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            if(userAuthenticated){</span>
+<span class="nc" id="L84">                currentAccountNumber = accountNumber;</span>
+<span class="nc" id="L85">                break;</span>
+            }
+            else{
+<span class="nc" id="L88">                screen.displayMessageLine(&quot;Invalid Account Number or PIN.&quot;);</span>
+<span class="nc" id="L89">                screen.displayMessageLine(&quot;Please Try Again.&quot;);</span>
+<span class="nc" id="L90">                tries++;</span>
+            }
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if(tries &gt; 3) {</span>
+<span class="nc" id="L93">                screen.displayMessageLine(&quot;Your bank account is blocked!&quot;);</span>
+<span class="nc" id="L94">                System.exit(0);</span>
+            }
+<span class="nc" id="L96">        }</span>
+<span class="nc" id="L97">   } </span>
+
+   // display the main menu and perform transactions
+   private void performTransactions() {
+      // local variable to store transaction currently being processed
+<span class="nc" id="L102">      Transaction currentTransaction = null;</span>
+<span class="nc" id="L103">      boolean userExited = false; // user has not chosen to exit</span>
+
+      // loop while user has not chosen option to exit system
+<span class="nc bnc" id="L106" title="All 2 branches missed.">      while (!userExited) {</span>
+         // show main menu and get user selection
+<span class="nc" id="L108">         int mainMenuSelection = displayMainMenu();</span>
+
+         // decide how to proceed based on user's menu selection
+<span class="nc bnc" id="L111" title="All 13 branches missed.">         switch (mainMenuSelection) {</span>
+            // user chose to perform one of three transaction types
+            case BALANCE_INQUIRY:         
+
+               // initialize as new object of chosen type
+<span class="nc" id="L116">               currentTransaction = </span>
+<span class="nc" id="L117">                  createTransaction(mainMenuSelection);</span>
+
+<span class="nc" id="L119">               currentTransaction.execute(); // execute transaction</span>
+<span class="nc" id="L120">               break; </span>
+            case WITHDRAWAL:
+                
+<span class="nc" id="L123">                 currentTransaction =</span>
+<span class="nc" id="L124">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L126">                 currentTransaction.execute();</span>
+<span class="nc" id="L127">                 break;</span>
+            case DEPOSIT:
+                
+<span class="nc" id="L130">                 currentTransaction =</span>
+<span class="nc" id="L131">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L133">                 currentTransaction.execute();</span>
+<span class="nc" id="L134">                 break;</span>
+             case TRANSFER:
+                
+<span class="nc" id="L137">                 currentTransaction =</span>
+<span class="nc" id="L138">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L140">                 currentTransaction.execute();</span>
+<span class="nc" id="L141">                 break;</span>
+             case BELIPULSA:
+<span class="nc" id="L143">                 currentTransaction =</span>
+<span class="nc" id="L144">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L146">                 currentTransaction.execute();</span>
+<span class="nc" id="L147">                 break;</span>
+             case MATAUANG:
+<span class="nc" id="L149">                 currentTransaction =</span>
+<span class="nc" id="L150">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L152">                 currentTransaction.execute();</span>
+<span class="nc" id="L153">                 break;</span>
+             case PEMBAYARANASURANSI:
+                
+<span class="nc" id="L156">                 currentTransaction =</span>
+<span class="nc" id="L157">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L159">                 currentTransaction.execute();</span>
+<span class="nc" id="L160">                 break;</span>
+             case PEMBAYARANTIKETPESAWAT:
+                
+<span class="nc" id="L163">                 currentTransaction =</span>
+<span class="nc" id="L164">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L166">                 currentTransaction.execute();</span>
+<span class="nc" id="L167">                 break;</span>
+             case PEMBAYARANECOMMERCE:
+                
+<span class="nc" id="L170">                 currentTransaction =</span>
+<span class="nc" id="L171">                         createTransaction(mainMenuSelection);</span>
+                 
+<span class="nc" id="L173">                 currentTransaction.execute();</span>
+<span class="nc" id="L174">                 break;</span>
+//             case TRANSFERBANYAK:
+//                
+//                 currentTransaction =
+//                         createTransaction(mainMenuSelection);
+//                 
+//                 currentTransaction.execute();
+//                 break;
+             case ANOTHER_PAYMENT :
+<span class="nc" id="L183">                currentTransaction = </span>
+<span class="nc" id="L184">                createTransaction(mainMenuSelection);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                if(currentTransaction != createTransaction(0)){</span>
+<span class="nc" id="L186">                    System.out.println(&quot;test&quot;);</span>
+<span class="nc" id="L187">                    currentTransaction.execute();</span>
+                }
+                break;
+             case HISTORY:
+
+<span class="nc" id="L192">               currentTransaction =</span>
+<span class="nc" id="L193">                       createTransaction(mainMenuSelection);</span>
+
+<span class="nc" id="L195">               currentTransaction.execute();</span>
+<span class="nc" id="L196">               break;</span>
+            case EXIT: // user chose to terminate session
+<span class="nc" id="L198">               screen.displayMessageLine(&quot;\nExiting the system...&quot;);</span>
+<span class="nc" id="L199">               userExited = true;</span>
+<span class="nc" id="L200">               break;</span>
+            default: // 
+<span class="nc" id="L202">               screen.displayMessageLine(</span>
+                  &quot;\nYou did not enter a valid selection. Try again.&quot;);
+               break;
+         }
+<span class="nc" id="L206">      } </span>
+<span class="nc" id="L207">   } </span>
+
+   // display the main menu and return an input selection
+   private int displayMainMenu() {
+<span class="nc" id="L211">      screen.displayMessageLine(&quot;\nMain menu:&quot;);</span>
+<span class="nc" id="L212">      screen.displayMessageLine(&quot;1 - View my balance&quot;);</span>
+<span class="nc" id="L213">      screen.displayMessageLine(&quot;2 - Withdraw cash&quot;);</span>
+<span class="nc" id="L214">      screen.displayMessageLine(&quot;3 - Deposit funds&quot;);</span>
+<span class="nc" id="L215">      screen.displayMessageLine(&quot;4 - Transfer&quot;);</span>
+//      screen.displayMessageLine(&quot;5 - Beli Pulsa&quot;);
+<span class="nc" id="L217">      screen.displayMessageLine(&quot;6 - View My Balance (dalam Rupiah)&quot;);</span>
+//      screen.displayMessageLine(&quot;7 - Pembayaran Asuransi&quot;);
+//      screen.displayMessageLine(&quot;8 - Pembayaran Tiket Pesawat&quot;);
+//      screen.displayMessageLine(&quot;9 - Pembayaran E Commerce&quot;);
+//      screen.displayMessageLine(&quot;10 - Transfer ke banyak account&quot;);
+<span class="nc" id="L222">      screen.displayMessageLine(&quot;11 - Another Payment&quot;);</span>
+<span class="nc" id="L223">      screen.displayMessageLine(&quot;12 - Show History&quot;);</span>
+<span class="nc" id="L224">      screen.displayMessageLine(&quot;13 - Exit\n&quot;);</span>
+      
+      /* Tambahan &lt;-------------------------*/
+<span class="nc" id="L227">      Date date = new Date();</span>
+<span class="nc" id="L228">      String strDateFormat = &quot;yyyy/MM/dd       hh:mm:ss a&quot;;</span>
+<span class="nc" id="L229">      String dates = &quot;hh&quot;;</span>
+<span class="nc" id="L230">      DateFormat dateFormat = new SimpleDateFormat(strDateFormat);</span>
+<span class="nc" id="L231">      DateFormat justDate = new SimpleDateFormat(dates);</span>
+<span class="nc" id="L232">      String formattedDate= dateFormat.format(date);</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">      if (dateNow != justDate.format(date)){</span>
+<span class="nc" id="L234">         bankDatabase.resetLimit();</span>
+      }
+<span class="nc" id="L236">      dateNow = justDate.format(date);</span>
+<span class="nc" id="L237">      System.out.println(&quot;Waktu Setempat : &quot; + formattedDate);</span>
+
+      /* Tambahan &lt;-------------------------*/
+      
+<span class="nc" id="L241">      screen.displayMessage(&quot;Enter a choice: &quot;);</span>
+<span class="nc" id="L242">      return keypad.getInput();</span>
+       // return user's selection
+   } 
+         
+   private Transaction createTransaction(int type) {
+<span class="nc" id="L247">      Transaction temp = null; </span>
+      int pilih;
+       
+<span class="nc bnc" id="L250" title="All 12 branches missed.">              switch (type) {</span>
+         case BALANCE_INQUIRY: 
+<span class="nc" id="L252">            temp = new BalanceInquiry(</span>
+               currentAccountNumber, screen, bankDatabase);
+<span class="nc" id="L254">            break;</span>
+         case WITHDRAWAL:
+<span class="nc" id="L256">             temp = new Withdrawal(currentAccountNumber,screen,bankDatabase,keypad,cashDispenser);</span>
+<span class="nc" id="L257">             break;</span>
+         case DEPOSIT:
+<span class="nc" id="L259">             temp = new Deposit(currentAccountNumber,screen,bankDatabase,keypad,depositSlot);</span>
+<span class="nc" id="L260">             break;</span>
+         case TRANSFER:
+<span class="nc" id="L262">             screen.displayMessageLine(&quot;TRANSFER :&quot;);</span>
+<span class="nc" id="L263">            screen.displayMessageLine(&quot;1 - Transfer to 1 account&quot;);</span>
+<span class="nc" id="L264">            screen.displayMessageLine(&quot;2 - Transfer to many accounts&quot;);</span>
+<span class="nc" id="L265">            screen.displayMessageLine(&quot;0 - Exit\n&quot;);</span>
+<span class="nc" id="L266">            screen.displayMessage(&quot;Enter a choice: &quot;);</span>
+<span class="nc" id="L267">            pilih = 0;</span>
+<span class="nc" id="L268">            pilih = keypad.getInput();</span>
+<span class="nc bnc" id="L269" title="All 4 branches missed.">            switch(pilih) {</span>
+                case 1 : 
+<span class="nc" id="L271">                    temp = new Transfer(currentAccountNumber,screen,bankDatabase,keypad,cashDispenser,depositSlot);</span>
+<span class="nc" id="L272">                    break;</span>
+                case 2 : 
+                    
+<span class="nc" id="L275">                    temp = new TransferBanyak(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot);</span>
+<span class="nc" id="L276">                    break;</span>
+                case 0: // user chose to terminate session
+<span class="nc" id="L278">               screen.displayMessageLine(&quot;\nExiting the system...&quot;);</span>
+<span class="nc" id="L279">               break;</span>
+                default: // 
+<span class="nc" id="L281">               screen.displayMessageLine(</span>
+                  &quot;\nYou did not enter a valid selection. Try again.&quot;);
+<span class="nc" id="L283">               break;</span>
+            }break;
+             
+         case BELIPULSA:
+<span class="nc" id="L287">             temp = new Bayar_Pulsa(currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L288">             break;</span>
+         case MATAUANG:
+<span class="nc" id="L290">             temp = new KonversiUang(currentAccountNumber, screen, bankDatabase);</span>
+<span class="nc" id="L291">             break;</span>
+         case PEMBAYARANASURANSI:
+<span class="nc" id="L293">             temp = new PembayaranAsuransi(currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L294">             break;</span>
+         case PEMBAYARANTIKETPESAWAT:
+<span class="nc" id="L296">             temp = new PembayaranTiketPesawat(currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L297">             break;</span>
+         case PEMBAYARANECOMMERCE:
+<span class="nc" id="L299">             temp = new EcommerceScreen(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot, eCommerce);</span>
+<span class="nc" id="L300">             break;</span>
+//         case TRANSFERBANYAK:
+//             temp = new TransferBanyak(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot);
+//             break;
+         case ANOTHER_PAYMENT :
+             
+<span class="nc" id="L306">            screen.displayMessageLine(&quot;ANOTHER PAYMENT&quot;);</span>
+<span class="nc" id="L307">            screen.displayMessageLine(&quot;1 - Pulsa Listrik&quot;);</span>
+<span class="nc" id="L308">            screen.displayMessageLine(&quot;2 - Pajak&quot;);</span>
+<span class="nc" id="L309">            screen.displayMessageLine(&quot;3 - Tiket Kereta Api&quot;);</span>
+<span class="nc" id="L310">            screen.displayMessageLine(&quot;4 - Pulsa&quot;);</span>
+<span class="nc" id="L311">            screen.displayMessageLine(&quot;5 - Asuransi&quot;);</span>
+<span class="nc" id="L312">            screen.displayMessageLine(&quot;6 - Tiket Pesawat&quot;);</span>
+<span class="nc" id="L313">            screen.displayMessageLine(&quot;7 - e - Commerce&quot;);</span>
+<span class="nc" id="L314">            screen.displayMessageLine(&quot;0 - Exit\n&quot;);</span>
+<span class="nc" id="L315">            screen.displayMessage(&quot;Enter a choice: &quot;);</span>
+<span class="nc" id="L316">            pilih = 0;</span>
+<span class="nc" id="L317">            pilih = keypad.getInput(); // return user's selection</span>
+            
+<span class="nc bnc" id="L319" title="All 9 branches missed.">            switch(pilih) {</span>
+                case 1 : 
+<span class="nc" id="L321">                    temp = new PulsaListrik (currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L322">                    break;</span>
+                case 2 : 
+<span class="nc" id="L324">                    temp = new Pajak (currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L325">                    break;</span>
+                case 3 : 
+<span class="nc" id="L327">                    temp = new TiketKeretaApi (currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L328">                    break;</span>
+                case 4 : 
+<span class="nc" id="L330">                    temp = new Bayar_Pulsa(currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L331">                    break;</span>
+                case 5 : 
+<span class="nc" id="L333">                    temp = new PembayaranAsuransi(currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L334">                    break;</span>
+                case 6 : 
+<span class="nc" id="L336">                    temp = new PembayaranTiketPesawat(currentAccountNumber, screen, bankDatabase, keypad);</span>
+<span class="nc" id="L337">                    break;</span>
+                case 7 : 
+<span class="nc" id="L339">                    temp = new EcommerceScreen(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot, eCommerce);</span>
+<span class="nc" id="L340">                    break;</span>
+                case 0: // user chose to terminate session
+<span class="nc" id="L342">               screen.displayMessageLine(&quot;\nExiting the system...&quot;);</span>
+<span class="nc" id="L343">               break;</span>
+                default: // 
+<span class="nc" id="L345">               screen.displayMessageLine(</span>
+                  &quot;\nYou did not enter a valid selection. Try again.&quot;);
+<span class="nc" id="L347">               break;</span>
+            }
+            break;
+         case HISTORY:
+<span class="nc" id="L351">             temp = new History(currentAccountNumber,screen,bankDatabase);</span>
+             break;
+      
+          }
+      
+
+<span class="nc" id="L357">      return temp;</span>
+   } 
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

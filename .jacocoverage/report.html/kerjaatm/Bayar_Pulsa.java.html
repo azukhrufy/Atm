@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Bayar_Pulsa.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;KerjaAtm&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">kerjaatm</a> &gt; <span class="el_source">Bayar_Pulsa.java</span></div><h1>Bayar_Pulsa.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package kerjaatm;
+
+/**
+ *
+ * @author Azukhrufy
+ */
+public class Bayar_Pulsa extends Transaction{
+    private double pulsaamount; // amount to withdraw
+   private Keypad keypad; // reference to keypad
+   private CashDispenser cashDispenser; // reference to cash dispenser
+   private final static int CANCELED = 6;
+
+    public Bayar_Pulsa(int userAccountNumber, Screen atmScreen, BankDatabase atmBankDatabase, Keypad atmkeypad) {
+<span class="nc" id="L19">        super(userAccountNumber, atmScreen, atmBankDatabase);</span>
+<span class="nc" id="L20">        keypad = atmkeypad;</span>
+<span class="nc" id="L21">    }</span>
+
+    @Override
+    public void execute() {
+<span class="nc" id="L25">        pulsaamount = BeliPulsa();</span>
+        double amount;
+       
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        if(pulsaamount == CANCELED){</span>
+<span class="nc" id="L29">           screen.displayMessageLine(&quot;Canceling transaction...&quot;);</span>
+       }
+       else{
+<span class="nc" id="L32">                 amount = pulsaamount/15;</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">               if(super.getBankDatabase().getAvailableBalance(super.getAccountNumber())&gt;= amount){</span>
+<span class="nc" id="L34">                   super.getBankDatabase().belipulsa(super.getAccountNumber(), amount);</span>
+                   
+<span class="nc" id="L36">                   screen.displayMessageLine(&quot;Pembelian Voucher &quot;+ pulsaamount+ &quot; ribu Berhasil :&quot;);</span>
+<span class="nc" id="L37">                   screen.displayMessageLine(&quot;kode voucher : 30675940287509&quot;);</span>
+<span class="nc" id="L38">                    screen.displayMessageLine(&quot;Lakukan pengisian pulsa dengan cara : *123*[kode voucher]#&quot;);</span>
+<span class="nc" id="L39">                    screen.displayMessageLine(&quot;Lalu tekan Yes atau Ok&quot;);</span>
+               }
+           
+            
+       }
+
+        
+<span class="nc" id="L46">    }</span>
+    private double BeliPulsa() {
+<span class="nc" id="L48">      int userChoice = 0; // local variable to store return value</span>
+
+<span class="nc" id="L50">      Screen screen = getScreen(); // get screen reference</span>
+      
+      // array of amounts to correspond to menu numbers
+<span class="nc" id="L53">      int[] amounts = {0, 10, 20, 60, 100, 150};</span>
+
+      // loop while no valid choice has been made
+<span class="nc bnc" id="L56" title="All 2 branches missed.">      while (userChoice == 0) {</span>
+         // display the withdrawal menu
+<span class="nc" id="L58">         screen.displayMessageLine(&quot;\nWithdrawal Menu:&quot;);</span>
+<span class="nc" id="L59">         screen.displayMessageLine(&quot;1 - Pulsa 10 ribu&quot;);</span>
+<span class="nc" id="L60">         screen.displayMessageLine(&quot;2 - Pulsa 20 ribu&quot;);</span>
+<span class="nc" id="L61">         screen.displayMessageLine(&quot;3 - Pulsa 60 ribu&quot;);</span>
+<span class="nc" id="L62">         screen.displayMessageLine(&quot;4 - Pulsa 100 ribu&quot;);</span>
+<span class="nc" id="L63">         screen.displayMessageLine(&quot;5 - Pulsa 150 ribu&quot;);</span>
+<span class="nc" id="L64">         screen.displayMessageLine(&quot;6 - Cancel transaction&quot;);</span>
+<span class="nc" id="L65">         screen.displayMessage(&quot;\nChoose a withdrawal amount: &quot;);</span>
+
+<span class="nc" id="L67">         int inputs = keypad.getInput(); // get user input through keypad</span>
+
+         // determine how to proceed based on the input value
+<span class="nc bnc" id="L70" title="All 7 branches missed.">         switch (inputs) {</span>
+            case 1: 
+<span class="nc" id="L72">                userChoice = amounts[inputs];</span>
+<span class="nc" id="L73">                break;// if the user chose a withdrawal amount </span>
+            case 2: 
+<span class="nc" id="L75">                userChoice = amounts[inputs];</span>
+<span class="nc" id="L76">                break;// (i.e., chose option 1, 2, 3, 4 or 5), return the</span>
+            case 3: 
+<span class="nc" id="L78">                userChoice = amounts[inputs];</span>
+<span class="nc" id="L79">                break;// corresponding amount from amounts array</span>
+            case 4:
+<span class="nc" id="L81">                userChoice = amounts[inputs];</span>
+<span class="nc" id="L82">                break;</span>
+            case 5:
+<span class="nc" id="L84">               userChoice = amounts[inputs]; // save user's choice</span>
+<span class="nc" id="L85">               break;       </span>
+            case CANCELED: // the user chose to cancel
+<span class="nc" id="L87">               userChoice = CANCELED; // save user's choice</span>
+<span class="nc" id="L88">               break;</span>
+            default: // the user did not enter a value from 1-6
+<span class="nc" id="L90">               screen.displayMessageLine(</span>
+                  &quot;\nInvalid selection. Try again.&quot;);
+               break;
+         } 
+<span class="nc" id="L94">      } </span>
+
+<span class="nc" id="L96">      return userChoice; // return withdrawal amount or CANCELED</span>
+   }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

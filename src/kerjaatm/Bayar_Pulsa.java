@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package kerjaatm;
+import java.util.Random;
 
 /**
  *
@@ -24,6 +25,9 @@ public class Bayar_Pulsa extends Transaction{
     public void execute() {
         pulsaamount = BeliPulsa();
         double amount;
+        Random rand = new Random();
+        int max = 599999999;
+        int min = 500000000;
        
         if(pulsaamount == CANCELED){
            screen.displayMessageLine("Canceling transaction...");
@@ -34,7 +38,9 @@ public class Bayar_Pulsa extends Transaction{
                    super.getBankDatabase().belipulsa(super.getAccountNumber(), amount);
                    
                    screen.displayMessageLine("Pembelian Voucher "+ pulsaamount+ " ribu Berhasil :");
-                   screen.displayMessageLine("kode voucher : 30675940287509");
+                   
+                   int value =rand.nextInt((max - min) + 1) + min;
+                   screen.displayMessageLine("kode voucher : "+ value);
                     screen.displayMessageLine("Lakukan pengisian pulsa dengan cara : *123*[kode voucher]#");
                     screen.displayMessageLine("Lalu tekan Yes atau Ok");
                }

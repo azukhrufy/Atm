@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TransferBanyak.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;KerjaAtm&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">kerjaatm</a> &gt; <span class="el_source">TransferBanyak.java</span></div><h1>TransferBanyak.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package kerjaatm;
+
+/**
+ *
+ * @author Azukhrufy
+ */
+public class TransferBanyak extends Transaction {
+    private double transferamount; // amount to withdraw
+   private Keypad keypad; // reference to keypad
+   private CashDispenser cashDispenser; // reference to cash dispenser
+   private final static int CANCELED = 0;
+   
+   public TransferBanyak(int userAccountNumber, Screen atmScreen, 
+      BankDatabase atmBankDatabase, Keypad atmKeypad, 
+      CashDispenser atmCashDispenser,DepositSlot atmDepositSlot) {
+
+      // initialize superclass variables
+<span class="nc" id="L23">      super(userAccountNumber, atmScreen, atmBankDatabase);</span>
+<span class="nc" id="L24">      keypad = atmKeypad;</span>
+      
+<span class="nc" id="L26">   }</span>
+   @Override
+   public void execute() {
+<span class="nc" id="L29">       BankDatabase bankDatabase = getBankDatabase();</span>
+<span class="nc" id="L30">      Screen screen = getScreen();</span>
+<span class="nc" id="L31">      screen.displayMessage(&quot;Masukkan jumlah rekening yang akan anda kirim :&quot;);</span>
+<span class="nc" id="L32">      int jumkir = keypad.getInput();</span>
+<span class="nc" id="L33">      int[] tujuans = new int[jumkir];</span>
+<span class="nc" id="L34">      int i = 0;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">      while(i&lt;jumkir){</span>
+<span class="nc" id="L36">          screen.displayMessage(&quot;Masukkan nomor rekening tujuan ke[&quot;+i+&quot;] :&quot;);</span>
+<span class="nc" id="L37">          int tujuan = keypad.getInput();</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">     if(getBankDatabase().accountexist(tujuan) == true){</span>
+<span class="nc" id="L39">         tujuans[i] = tujuan;</span>
+<span class="nc" id="L40">       i++;</span>
+     }
+     else {
+<span class="nc" id="L43">         screen.displayMessageLine(&quot;Nomor rekening tujuan tidak valid&quot;);</span>
+     }
+<span class="nc" id="L45">      }</span>
+<span class="nc" id="L46">      i=0;</span>
+<span class="nc" id="L47">      transferamount = jumlahTransfer();</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">      if(getBankDatabase().getAvailableBalance(getAccountNumber()) &gt; transferamount*tujuans.length){</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">    while(i &lt; tujuans.length){</span>
+<span class="nc" id="L50">           getBankDatabase().transfer(getAccountNumber(), transferamount,tujuans[i]);</span>
+<span class="nc" id="L51">           screen.displayMessageLine(&quot;Transfer sebesar $&quot;+transferamount+&quot; pada Akun &quot;+tujuans[i]+&quot; Telah berhasil&quot;);</span>
+<span class="nc" id="L52">       i++;</span>
+    }
+    }
+      else{
+<span class="nc" id="L56">           screen.displayMessageLine(&quot;Saldo tidak mencukupi..&quot;);</span>
+      }
+<span class="nc" id="L58">   } </span>
+   private double jumlahTransfer(){
+<span class="nc" id="L60">       Screen screen = getScreen(); // get reference to screen</span>
+
+      // display the prompt
+<span class="nc" id="L63">      screen.displayMessage(&quot;\nPlease enter transfer amount in &quot; + </span>
+         &quot;CENTS (or 0 to cancel): &quot;);
+<span class="nc" id="L65">      int input = keypad.getInput(); // receive input of deposit amount</span>
+      
+      // check whether the user canceled or entered a valid amount
+<span class="nc bnc" id="L68" title="All 2 branches missed.">      if (input == CANCELED) {</span>
+<span class="nc" id="L69">         return CANCELED;</span>
+      }
+      else {
+<span class="nc" id="L72">         return (double) input / 100; // return dollar amount</span>
+      }
+   }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

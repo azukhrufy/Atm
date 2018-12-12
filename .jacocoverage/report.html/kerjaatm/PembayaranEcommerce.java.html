@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PembayaranEcommerce.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;KerjaAtm&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">kerjaatm</a> &gt; <span class="el_source">PembayaranEcommerce.java</span></div><h1>PembayaranEcommerce.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package kerjaatm;
+
+/**
+ *
+ * @author Acer
+ */
+public class PembayaranEcommerce {
+    private Ecommerce[] Ecommerces;
+    
+<span class="nc" id="L15">    public PembayaranEcommerce() {</span>
+<span class="nc" id="L16">        Ecommerces = new Ecommerce[3];</span>
+<span class="nc" id="L17">        Ecommerces[0] = new Ecommerce(677543,200.0);</span>
+<span class="nc" id="L18">        Ecommerces[1] = new Ecommerce(677542,1000.0);</span>
+<span class="nc" id="L19">        Ecommerces[2] = new Ecommerce(677541,50.0);</span>
+<span class="nc" id="L20">    }</span>
+    
+    private Ecommerce getEcommerce(int idtrans) {
+<span class="nc bnc" id="L23" title="All 2 branches missed.">       for(int i=0;i&lt;Ecommerces.length;i++){</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">           if(Ecommerces[i].getNomortransaksi() == idtrans){</span>
+<span class="nc" id="L25">               return Ecommerces[i];</span>
+           }
+       }
+<span class="nc" id="L28">      return null; // if no matching account was found, return null</span>
+   } 
+   
+    public int getNomortransaksi(int notrans){
+<span class="nc" id="L32">        return getEcommerce(notrans).getNomortransaksi();</span>
+    }
+    
+    public double getJumlahpembayaran(int notrans){
+<span class="nc" id="L36">        return getEcommerce(notrans).getJumlahpembayaran();</span>
+    }
+    
+    public void BayarEcommerce(int userAccountNumber,int notrans,double amount){
+<span class="nc" id="L40">        getEcommerce(notrans).changeStat(amount);</span>
+<span class="nc" id="L41">    }</span>
+    
+    public boolean getStatus(int notrans){
+<span class="nc" id="L44">        return getEcommerce(notrans).getStatus();</span>
+    }
+    
+    public boolean idtransexist(int notrans){
+<span class="nc bnc" id="L48" title="All 2 branches missed.">       if(getEcommerce(notrans) != null){</span>
+<span class="nc" id="L49">           return true;</span>
+       }
+       else {
+<span class="nc" id="L52">           return false;</span>
+       }
+   }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
