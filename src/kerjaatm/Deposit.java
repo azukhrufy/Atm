@@ -31,7 +31,12 @@ public class Deposit extends Transaction {
    @Override
    public void execute() {
        amount = promptForDepositAmount();
+    if(amount>0){
        getBankDatabase().credit(getAccountNumber(),amount);
+       screen.displayMessageLine("Akun anda "+getAccountNumber()+" Berhasil Menambah Deposit sebesar $"+amount);
+    } else {
+        screen.displayMessageLine("Deposit tidak boleh kurang dari $0");
+    }
        
    }
 
