@@ -21,4 +21,8 @@ public class Keypad {
    public int getInput() {
       return input.nextInt(); // user enters an integer
    } 
+   
+    public String getString(){
+       return input.nextLine();
+    }
 }
