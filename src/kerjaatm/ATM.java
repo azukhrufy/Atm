@@ -30,15 +30,15 @@ public class ATM {
    private static final int WITHDRAWAL = 2;
    private static final int DEPOSIT = 3;
    private static final int TRANSFER = 4;
-   private static final int BELIPULSA = 5;
-   private static final int MATAUANG = 6;
-   private static final int PEMBAYARANASURANSI =7;
-   private static final int PEMBAYARANTIKETPESAWAT =8;
-   private static final int PEMBAYARANECOMMERCE =9;
+   //private static final int BELIPULSA = 5;
+   //private static final int MATAUANG = 6;
+   //private static final int PEMBAYARANASURANSI =7;
+   //private static final int PEMBAYARANTIKETPESAWAT =8;
+  // private static final int PEMBAYARANECOMMERCE =9;
 //   private static final int TRANSFERBANYAK = 10;
-   private static final int ANOTHER_PAYMENT = 11;
-   private static final int HISTORY = 12;
-   private static final int EXIT = 13;
+   private static final int ANOTHER_PAYMENT = 5;
+   private static final int HISTORY = 6;
+   private static final int EXIT = 7;
 
    // no-argument ATM constructor initializes instance variables
    public ATM() {
@@ -125,8 +125,11 @@ public class ATM {
                // initialize as new object of chosen type
                currentTransaction = 
                   createTransaction(mainMenuSelection);
-
-               currentTransaction.execute(); // execute transaction
+                if(currentTransaction != createTransaction(0)){
+                    
+                    currentTransaction.execute();
+                }
+                 // execute transaction
                break; 
             case WITHDRAWAL:
                 
@@ -151,46 +154,6 @@ public class ATM {
                     currentTransaction.execute();
                 }
                 break;
-             case BELIPULSA:
-                 currentTransaction =
-                         createTransaction(mainMenuSelection);
-                 
-                 currentTransaction.execute();
-                 break;
-             case MATAUANG:
-                 currentTransaction =
-                         createTransaction(mainMenuSelection);
-                 
-                 currentTransaction.execute();
-                 break;
-             case PEMBAYARANASURANSI:
-                
-                 currentTransaction =
-                         createTransaction(mainMenuSelection);
-                 
-                 currentTransaction.execute();
-                 break;
-             case PEMBAYARANTIKETPESAWAT:
-                
-                 currentTransaction =
-                         createTransaction(mainMenuSelection);
-                 
-                 currentTransaction.execute();
-                 break;
-             case PEMBAYARANECOMMERCE:
-                
-                 currentTransaction =
-                         createTransaction(mainMenuSelection);
-                 
-                 currentTransaction.execute();
-                 break;
-//             case TRANSFERBANYAK:
-//                
-//                 currentTransaction =
-//                         createTransaction(mainMenuSelection);
-//                 
-//                 currentTransaction.execute();
-//                 break;
              case ANOTHER_PAYMENT :
                 currentTransaction = 
                 createTransaction(mainMenuSelection);
@@ -226,14 +189,14 @@ public class ATM {
       screen.displayMessageLine("3 - Deposit funds");
       screen.displayMessageLine("4 - Transfer");
 //      screen.displayMessageLine("5 - Beli Pulsa");
-      screen.displayMessageLine("6 - View My Balance (dalam Rupiah)");
+//      screen.displayMessageLine("6 - View My Balance (dalam Rupiah)");
 //      screen.displayMessageLine("7 - Pembayaran Asuransi");
 //      screen.displayMessageLine("8 - Pembayaran Tiket Pesawat");
 //      screen.displayMessageLine("9 - Pembayaran E Commerce");
 //      screen.displayMessageLine("10 - Transfer ke banyak account");
-      screen.displayMessageLine("11 - Another Payment");
-      screen.displayMessageLine("12 - Show History");
-      screen.displayMessageLine("13 - Exit\n");
+      screen.displayMessageLine("5 - Another Payment");
+      screen.displayMessageLine("6 - Show History");
+      screen.displayMessageLine("7 - Exit\n");
       
       /* Tambahan <-------------------------*/
       Date date = new Date();
@@ -261,8 +224,30 @@ public class ATM {
        
               switch (type) {
          case BALANCE_INQUIRY: 
-            temp = new BalanceInquiry(
+            screen.displayMessageLine("ANOTHER PAYMENT");
+            screen.displayMessageLine("1 - View My Balance (in $)");
+            screen.displayMessageLine("2 - View My Balance (Dalam rupiah)");
+            screen.displayMessageLine("0 - Exit\n");
+            screen.displayMessage("Enter a choice: ");
+            pilih = 0;
+            pilih = keypad.getInput();
+            switch(pilih) {
+                case 1 : 
+                temp = new BalanceInquiry(
                currentAccountNumber, screen, bankDatabase);
+            break;
+                case 2 : 
+                    
+                temp = new KonversiUang(currentAccountNumber, screen, bankDatabase);
+                break;
+                case 0: // user chose to terminate session
+               screen.displayMessageLine("\nExiting..");
+               break;
+                default: // 
+               screen.displayMessageLine(
+                  "\nYou did not enter a valid selection. Try again.");
+               break;
+            }
             break;
          case WITHDRAWAL:
              temp = new Withdrawal(currentAccountNumber,screen,bankDatabase,keypad,cashDispenser);
@@ -294,22 +279,7 @@ public class ATM {
                   "\nYou did not enter a valid selection. Try again.");
                break;
             }
-            break; 
-         case BELIPULSA:
-             temp = new Bayar_Pulsa(currentAccountNumber, screen, bankDatabase, keypad);
-             break;
-         case MATAUANG:
-             temp = new KonversiUang(currentAccountNumber, screen, bankDatabase);
-             break;
-         case PEMBAYARANASURANSI:
-             temp = new PembayaranAsuransi(currentAccountNumber, screen, bankDatabase, keypad);
-             break;
-         case PEMBAYARANTIKETPESAWAT:
-             temp = new PembayaranTiketPesawat(currentAccountNumber, screen, bankDatabase, keypad);
-             break;
-         case PEMBAYARANECOMMERCE:
-             temp = new EcommerceScreen(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot, eCommerce);
-             break;
+            break;
 //         case TRANSFERBANYAK:
 //             temp = new TransferBanyak(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot);
 //             break;
