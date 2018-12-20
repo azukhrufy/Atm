@@ -14,7 +14,7 @@ public class ChangeLang {
     private Screen screen;
     private Keypad keypad;
     private int bhs;
-    private static int choose;
+    private static int choose = 0;
 
     public ChangeLang() {
         screen = new Screen();
