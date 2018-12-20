@@ -80,14 +80,20 @@ public class ATM {
 
    // attempts to authenticate user against database
     private void authenticateUser() {
+        ATM theATM = new ATM();
        int tries = 0;
         while(true) {
             if (cl.printMsg() == 1) {screen.displayMessage("\nPlease enter your account number : ");}
             if (cl.printMsg() == 2) {screen.displayMessage("\nSilahkan masukkan nomor akun anda: ");}
-            int accountNumber = keypad.getInput();
+            int accountNumber;
+
+               if(keypad.IsInteger()){
+                   accountNumber = keypad.getInput();
+                   if(accountNumber>999 && accountNumber<10000 ){
           if(accountNumber>999 && accountNumber<10000){
             if (cl.printMsg() == 1) {screen.displayMessage("\nEnter your PIN : ");}
             if (cl.printMsg() == 2) {screen.displayMessage("\nMasukkan nomor PIN anda: ");}
+            if(keypad.IsInteger()){
             int pin = keypad.getInput();
                 if(pin>999 && pin<10000){
             userAuthenticated = bankDatabase.authenticateUser(accountNumber, pin);
@@ -118,13 +124,26 @@ public class ATM {
               if (cl.printMsg() == 1) {screen.displayMessageLine("PIN must be 4 digits, you directed to input account Number again");}
               if (cl.printMsg() == 2) {screen.displayMessageLine("PIN harus 4 digit, anda dikembalikan ke laman nomor akun kembali");}
           }
+          } else {
+                screen.displayMessageLine("Input harus Angka!");
+                theATM.run();
+            }
           } else
           {
               if (cl.printMsg() == 1) {screen.displayMessageLine("Account number must be 4 digits");}
               if (cl.printMsg() == 2) {screen.displayMessageLine("Nomor akun harus 4 digit!");}
           }
+          
         }
-   }  
+     }
+         else {
+                   screen.displayMessageLine("Input harus Angka!");
+                   theATM.run();
+
+               }   
+   }
+               
+    }
     
     public void run_for_language() {
         boolean userExited = false;
