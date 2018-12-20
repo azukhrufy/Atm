@@ -28,4 +28,7 @@ public class Keypad {
     public String getString(){
        return input.nextLine();
     }
+    public String getInputS() {
+        return input.nextLine();
+    }
 }

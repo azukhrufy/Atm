@@ -22,6 +22,7 @@ public class ATM {
    private DepositSlot depositSlot;
    private PembayaranEcommerce eCommerce;
    public ChangeLang cl;
+    private PembayaranKeretaApi pembayaranKA;
    
     private static final int Language = 1;
     private static final int Bahasa = 2;
@@ -56,6 +57,7 @@ public class ATM {
       depositSlot = new DepositSlot();
       eCommerce = new PembayaranEcommerce();
       cl = new ChangeLang();
+        pembayaranKA = new PembayaranKeretaApi();
    }
 
    // start ATM 
@@ -425,7 +427,7 @@ public class ATM {
                     temp = new Pajak (currentAccountNumber, screen, bankDatabase, keypad);
                     break;
                 case 3 : 
-                    temp = new TiketKeretaApi (currentAccountNumber, screen, bankDatabase, keypad);
+                    temp = new TiketKeretaApi (currentAccountNumber, screen, bankDatabase, keypad, pembayaranKA);
                     break;
                 case 4 : 
                     temp = new Bayar_Pulsa(currentAccountNumber, screen, bankDatabase, keypad);
