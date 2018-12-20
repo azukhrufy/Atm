@@ -7,7 +7,6 @@ package kerjaatm;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 /**
  *
  * @author Acer
@@ -26,7 +25,7 @@ public class ATM {
    
     private static final int Language = 1;
     private static final int Bahasa = 2;
-    private boolean check_1 = false;
+    private boolean check_int = false;
     public int testt = 1;
    
    public String dateNow;
@@ -127,7 +126,8 @@ public class ATM {
               if (cl.printMsg() == 2) {screen.displayMessageLine("PIN harus 4 digit, anda dikembalikan ke laman nomor akun kembali");}
           }
           } else {
-                screen.displayMessageLine("Input harus Angka!");
+                if (cl.printMsg() == 1) {screen.displayMessageLine("Please input a number!");}
+                if (cl.printMsg() == 2) {screen.displayMessageLine("Input harus Angka!");}
                 theATM.run();
             }
           } else
@@ -139,7 +139,8 @@ public class ATM {
         }
      }
          else {
-                   screen.displayMessageLine("Input harus Angka!");
+                   if (cl.printMsg() == 1) {screen.displayMessageLine("Please input a number!");}
+                   if (cl.printMsg() == 2) {screen.displayMessageLine("Input harus Angka!");}
                    theATM.run();
 
                }   
@@ -152,8 +153,11 @@ public class ATM {
         screen.displayMessageLine("\nWelcome | Selamat Datang");
         screen.displayMessageLine("\nChoose your language | Pilih bahasa");
         screen.displayMessageLine("\n1. English");
-        screen.displayMessageLine("2. Bahasa");
+        screen.displayMessageLine("2. Indonesia");
+        
+        if (keypad.IsInteger()){
         int LB = keypad.getInput();
+        if (LB < 3){
         while (LB != 0) {
             switch (LB) {
                 case Language:
@@ -164,12 +168,23 @@ public class ATM {
                     cl.Sel(2);
                     LB = 0;
                     break;
+                case 0:
+                    System.exit(0);
                 default:
                     break;
             }
         }
         if (LB == 0) {
             userExited = true;
+        }
+        } else {
+            screen.displayMessageLine("\nInvalid input | Input Tidak Valid");
+            run_for_language();
+            cl.Sel(0);
+        }
+        } else {
+            screen.displayMessageLine("\nInvalid input | Input Tidak Valid");
+            cl.Sel(0);
         }
     }
 
@@ -399,7 +414,7 @@ public class ATM {
             screen.displayMessageLine("3 - Tiket Kereta Api");
             screen.displayMessageLine("4 - Pulsa");
             screen.displayMessageLine("5 - Asuransi");
-            screen.displayMessageLine("6 - Tiket Pesawat");
+            screen.displayMessageLine("6 - Flight Ticket");
             screen.displayMessageLine("7 - e - Commerce");
             screen.displayMessageLine("0 - Exit\n");
             screen.displayMessage("Enter a choice: ");
