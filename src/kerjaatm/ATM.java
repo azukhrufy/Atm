@@ -72,11 +72,18 @@ public class ATM {
    // attempts to authenticate user against database
     private void authenticateUser() {
        int tries = 0;
+        ATM theATM = new ATM(); 
+      
+          
         while(true) {
             screen.displayMessage("\nPlease enter your account number : ");
-            int accountNumber = keypad.getInput();
-          if(accountNumber>999 && accountNumber<10000){
+            int accountNumber;
+                
+               if(keypad.IsInteger()){
+                   accountNumber = keypad.getInput();
+                   if(accountNumber>999 && accountNumber<10000 ){
             screen.displayMessage("\nEnter your PIN : ");
+            if(keypad.IsInteger()){
             int pin = keypad.getInput();
                 if(pin>999 && pin<10000){
             userAuthenticated = bankDatabase.authenticateUser(accountNumber, pin);
@@ -99,10 +106,24 @@ public class ATM {
           {
               screen.displayMessageLine("PIN must be 4 digits, you directed to input account Number again");
           }
+            }
+            else {
+                screen.displayMessageLine("Input harus Angka!");
+                theATM.run();
+            }
           } else
           {
               screen.displayMessageLine("Account number must be 4 digits");
           }
+               }
+               else {
+                   screen.displayMessageLine("Input harus Angka!");
+                   theATM.run();
+                   
+               }
+            
+            
+          
         }
    }  
 
@@ -188,12 +209,6 @@ public class ATM {
       screen.displayMessageLine("2 - Withdraw cash");
       screen.displayMessageLine("3 - Deposit funds");
       screen.displayMessageLine("4 - Transfer");
-//      screen.displayMessageLine("5 - Beli Pulsa");
-//      screen.displayMessageLine("6 - View My Balance (dalam Rupiah)");
-//      screen.displayMessageLine("7 - Pembayaran Asuransi");
-//      screen.displayMessageLine("8 - Pembayaran Tiket Pesawat");
-//      screen.displayMessageLine("9 - Pembayaran E Commerce");
-//      screen.displayMessageLine("10 - Transfer ke banyak account");
       screen.displayMessageLine("5 - Another Payment");
       screen.displayMessageLine("6 - Show History");
       screen.displayMessageLine("7 - Exit\n");
