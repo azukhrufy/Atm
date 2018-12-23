@@ -156,32 +156,34 @@ public class ATM {
         screen.displayMessageLine("2. Indonesia");
         
         if (keypad.IsInteger()){
-        int LB = keypad.getInput();
-        if (LB < 3){
-        while (LB != 0) {
-            switch (LB) {
-                case Language:
-                    cl.Sel(1); //menentukan
-                    LB = 0; //untuk escape
-                    break;
-                case Bahasa:
-                    cl.Sel(2);
-                    LB = 0;
-                    break;
-                case 0:
-                    System.exit(0);
-                default:
-                    break;
+            int LB = keypad.getInput();
+            while (!userExited) {
+                if (LB < 3 && LB >= 0){
+                    switch (LB) {
+                        case Language:
+                            cl.Sel(1); //menentukan
+//                            LB = 0; //untuk escape
+                            userExited = true;
+                            break;
+                        case Bahasa:
+                            cl.Sel(2);
+//                            LB = 0;
+                            userExited = true;
+                            break;
+                        case 0:
+                            screen.displayMessageLine("\nExiting... | Menutup sistem...");
+                            userExited = true;
+                            System.exit(0);
+//                        default:
+//                            break;
+                    }
+                } else {
+                    screen.displayMessageLine("\nInvalid input | Input Tidak Valid");
+                    cl.Sel(0);
+                    run_for_language();
+                    return;
+                }
             }
-        }
-        if (LB == 0) {
-            userExited = true;
-        }
-        } else {
-            screen.displayMessageLine("\nInvalid input | Input Tidak Valid");
-            run_for_language();
-            cl.Sel(0);
-        }
         } else {
             screen.displayMessageLine("\nInvalid input | Input Tidak Valid");
             cl.Sel(0);
