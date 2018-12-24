@@ -33,11 +33,21 @@ public class BalanceInquiry extends Transaction {
          bankDatabase.getTotalBalance(getAccountNumber());
       
       // display the balance information on the screen
+      if (cl.printMsg() == 1){
       screen.displayMessageLine("\nBalance Information:");
       screen.displayMessage(" - Available balance: "); 
       screen.displayDollarAmount(availableBalance);
       screen.displayMessage("\n - Total balance:     ");
       screen.displayDollarAmount(totalBalance);
       screen.displayMessageLine("");
+      }
+      if (cl.printMsg() == 2){
+      screen.displayMessageLine("\nInformasi Saldo:");
+      screen.displayMessage(" - Saldo tersedia: "); 
+      screen.displayDollarAmount(availableBalance);
+      screen.displayMessage("\n - Saldo total:    ");
+      screen.displayDollarAmount(totalBalance);
+      screen.displayMessageLine("");
+      }
    }
 } 

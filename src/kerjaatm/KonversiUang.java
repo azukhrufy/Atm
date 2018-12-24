@@ -29,12 +29,22 @@ public class KonversiUang extends Transaction{
          bankDatabase.getTotalBalance(getAccountNumber());
       
       // display the balance information on the screen
+      if (cl.printMsg() == 1){
       screen.displayMessageLine("\nBalance Information:");
       screen.displayMessage(" - Available balance: "); 
       screen.displayAmount(availableBalance);
       screen.displayMessage("\n - Total balance:     ");
       screen.displayAmount(totalBalance);
       screen.displayMessageLine(""); //To change body of generated methods, choose Tools | Templates.
+      }
+      if (cl.printMsg() == 2){
+      screen.displayMessageLine("\nInformasi Saldo:");
+      screen.displayMessage(" - Saldo tersedia: "); 
+      screen.displayAmount(availableBalance);
+      screen.displayMessage("\n - Saldo total:    ");
+      screen.displayAmount(totalBalance);
+      screen.displayMessageLine("");
+      }
     }
     
 }

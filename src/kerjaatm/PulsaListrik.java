@@ -28,7 +28,8 @@ public class PulsaListrik extends Transaction{
         boolean flag = false;
         
         do{
-            screen.displayMessage("\nSilahkan Masukan Nomor Meter : ");
+            if(cl.printMsg() == 1){screen.displayMessage("\nPlease input the meter number : ");}
+            if(cl.printMsg() == 2){screen.displayMessage("\nSilahkan Masukan Nomor Meter : ");}
             try{
                 int no_meter = keypad.getInput();
                 flag = true;
@@ -37,28 +38,40 @@ public class PulsaListrik extends Transaction{
                     amount = displayMenuOfAmounts();
             
                     if (amount == CANCELED){
-                        screen.displayMessage("Membatalkan Transaksi...");
+                        if(cl.printMsg() == 1){screen.displayMessage("Canceling Transaction...");}
+                        if(cl.printMsg() == 2){screen.displayMessage("Membatalkan Transaksi...");}
                     }else{
                         double available = super.getBankDatabase().getAvailableBalance
                         (super.getAccountNumber());
                
                         if(available < amount){
-                            screen.displayMessageLine("Saldo tidak mencukupi");
+                            if(cl.printMsg() == 1){screen.displayMessageLine("Insufficient balance");}
+                            if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi");}
                         } else{
                             super.getBankDatabase().debit(super.getAccountNumber(), amount);
+                            if(cl.printMsg() == 1){
+                            screen.displayMessageLine("Prepaid electricity payment");
+                            screen.displayMessageLine("Customer ID      : " +getAccountNumber());
+                            screen.displayMessageLine("Meter Number     : " +no_meter);
+                            screen.displayMessageLine("Amount          : " +amount);
+                            }
+                            if(cl.printMsg() == 2){
                             screen.displayMessageLine("Pembelian Listrik Prabayar");
                             screen.displayMessageLine("ID Pelanggan     : " +getAccountNumber());
                             screen.displayMessageLine("Nomor Meter      : " +no_meter);
-                            screen.displayMessageLine("Nominal          : " +amount);                    
+                            screen.displayMessageLine("Nominal          : " +amount);
+                            }
                         }
                     }
                 } else{
-                    screen.displayMessageLine("Input Invalid.");
+                    if(cl.printMsg() == 1){screen.displayMessageLine("Invalid input.");}
+                    if(cl.printMsg() == 2){screen.displayMessageLine("Input tidak valid.");}
                     flag = false;
                 }
             }
             catch(Exception e){
-                screen.displayMessageLine("Input Invalid.");
+                if(cl.printMsg() == 1){screen.displayMessageLine("Invalid Input.");}
+                if(cl.printMsg() == 2){screen.displayMessageLine("Input tidak valid.");}
                 keypad.getString();
                 flag = false;
             }
@@ -71,6 +84,17 @@ public class PulsaListrik extends Transaction{
         int[] amounts = {0, 20, 50, 100, 200, 500};
 
         while (userChoice == 0) {
+            if(cl.printMsg() == 1){
+            screen.displayMessageLine("PLN Prepaid - Menu\n");
+            screen.displayMessageLine("1 - $20");
+            screen.displayMessageLine("2 - $50");
+            screen.displayMessageLine("3 - $100");
+            screen.displayMessageLine("4 - $200");
+            screen.displayMessageLine("5 - $500");
+            screen.displayMessageLine("6 - Cancel Transaction");
+            screen.displayMessage("\nChoose Amount : ");
+            }
+            if(cl.printMsg() == 2){
             screen.displayMessageLine("PLN Prabayar - Menu\n");
             screen.displayMessageLine("1 - $20");
             screen.displayMessageLine("2 - $50");
@@ -79,7 +103,7 @@ public class PulsaListrik extends Transaction{
             screen.displayMessageLine("5 - $500");
             screen.displayMessageLine("6 - Batalkan Transaksi");
             screen.displayMessage("\nPilih Nominal : ");
-
+            }
             int input = keypad.getInput(); 
             switch (input) {
                 case 1: {
@@ -107,7 +131,8 @@ public class PulsaListrik extends Transaction{
                     break;
                 }
                 default: {
-                    screen.displayMessageLine("\nInvalid selection. Try again.");
+                    if(cl.printMsg() == 1){screen.displayMessageLine("\nInvalid selection. Try again.");}
+                    if(cl.printMsg() == 2){screen.displayMessageLine("\nPilihan tidak valid. Coba lagi.");}
                 }
             } 
         } 

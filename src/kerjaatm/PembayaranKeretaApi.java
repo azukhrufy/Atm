@@ -60,6 +60,23 @@ public class PembayaranKeretaApi {
         return getKA(notrans).getKelas();
     }
     
+    public String getTrainClass(int notrans){
+        String tClass;
+        for(int i=0;i<KA.length;i++){
+            if(KA[i].getNomortransaksi() == notrans){
+               if (getKA(notrans).getKelas() == "Ekonomi"){
+                   return "Economy";
+               }
+               if (getKA(notrans).getKelas() == "Eksekutif"){
+                   return "Executive";
+               }
+               if (getKA(notrans).getKelas() == "Bisnis"){
+                   return "Business";
+               }
+            }
+        }return "";
+    }
+    
     public boolean idtransexist(int notrans){
         if(getKA(notrans) != null){
            return true;

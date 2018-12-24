@@ -13,7 +13,7 @@ public abstract class Transaction {
    private int accountNumber; // indicates account involved
    Screen screen; // ATM screen
    private BankDatabase bankDatabase; // account database
-
+   public ChangeLang cl;
  
    public Transaction(int userAccountNumber, Screen atmScreen, 
       BankDatabase atmBankDatabase) {
@@ -21,6 +21,7 @@ public abstract class Transaction {
       accountNumber = userAccountNumber;
       screen = atmScreen;
       bankDatabase = atmBankDatabase;
+      cl = new ChangeLang();
    }
 
    // return account number 

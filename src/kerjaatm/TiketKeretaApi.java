@@ -23,7 +23,8 @@ public class TiketKeretaApi extends Transaction{
 
     @Override
     public void execute() {
-        screen.displayMessage("\nSilahkan Masukan Kode Booking : ");
+        if(cl.printMsg() == 1){screen.displayMessage("\nInput Booking Code : ");}
+        if(cl.printMsg() == 2){screen.displayMessage("\nSilahkan Masukan Kode Booking : ");}
         int kode_booking = keypad.getInput();
         
         if(pembayaranKA.idtransexist(kode_booking) != false){
@@ -34,6 +35,17 @@ public class TiketKeretaApi extends Transaction{
                     pembayaranKA.BayarKA(getAccountNumber(), kode_booking, amount);
                     double available = super.getBankDatabase().getAvailableBalance(super.getAccountNumber());
                     if(pembayaranKA.getStatus(kode_booking) == true){
+                        if(cl.printMsg() == 1){
+                        screen.displayMessageLine("Train Ticket Payment");
+                        screen.displayMessageLine("Customer ID      : " +getAccountNumber());
+                        screen.displayMessageLine("Booking Code     : " +kode_booking);
+                        screen.displayMessageLine("Name             : " +pembayaranKA.getNama(kode_booking));
+                        screen.displayMessageLine("Departure From   : " +pembayaranKA.getDepature(kode_booking));
+                        screen.displayMessageLine("Destination      : " +pembayaranKA.getArrived(kode_booking));
+                        screen.displayMessageLine("Class            : " +pembayaranKA.getTrainClass(kode_booking));
+                        screen.displayMessageLine("Amount           : " +amount); 
+                        }
+                        if(cl.printMsg() == 2){
                         screen.displayMessageLine("Pembayaran Tiket Kereta Api");
                         screen.displayMessageLine("ID Pelanggan     : " +getAccountNumber());
                         screen.displayMessageLine("Kode Booking     : " +kode_booking);
@@ -42,21 +54,26 @@ public class TiketKeretaApi extends Transaction{
                         screen.displayMessageLine("Kedatangan       : " +pembayaranKA.getArrived(kode_booking));
                         screen.displayMessageLine("Kelas            : " +pembayaranKA.getKelas(kode_booking));
                         screen.displayMessageLine("Nominal          : " +amount); 
+                        }
                     }
                     else {
-                        screen.displayMessageLine("Pembayaran Gagal..");
+                        if(cl.printMsg() == 1){screen.displayMessageLine("Payment failed..");}
+                        if(cl.printMsg() == 2){screen.displayMessageLine("Pembayaran Gagal..");}
                     }
                 }
                 else {
-                    screen.displayMessageLine("Pembayaran gagal, nomor transaksi tersebut sudah dibayarkan");
+                    if(cl.printMsg() == 1){screen.displayMessageLine("Payment failed, that transaction number has been paid");}
+                    if(cl.printMsg() == 2){screen.displayMessageLine("Pembayaran gagal, nomor transaksi tersebut sudah dibayarkan");}
                 }
             }
             else {
-                screen.displayMessageLine("Saldo tidak mencukupi..");
+                if(cl.printMsg() == 1){screen.displayMessageLine("Insufficient balance..");}
+                if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi..");}
             }
         }
         else {
-            screen.displayMessageLine("ID Pelanggan tidak valid");
+            if(cl.printMsg() == 1){screen.displayMessageLine("Customer ID is invalid");}
+            if(cl.printMsg() == 2){screen.displayMessageLine("ID Pelanggan tidak valid");}
         }
     }
 }

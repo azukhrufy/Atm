@@ -29,15 +29,18 @@ public class PembayaranAsuransi extends Transaction {
     public void execute() {
       BankDatabase bankDatabase = getBankDatabase();
       Screen screen = getScreen();
-      screen.displayMessage("Masukkan nomor Polis Asuransi anda :");
+      if(cl.printMsg() == 1){screen.displayMessage("Input your Insurance Policy number :");}
+      if(cl.printMsg() == 2){screen.displayMessage("Masukkan nomor Polis Asuransi anda :");}
       int noPolis = keypad.getInput();
        amount = jumlahTransfer();
        if(getBankDatabase().getAvailableBalance(getAccountNumber()) > amount){
            getBankDatabase().transfer(getAccountNumber(), amount,noPolis);
-           screen.displayMessageLine("Pembayaran asuransi sebesar: "+amount+" Nomor Polis: "+noPolis+" Telah berhasil");
+           if(cl.printMsg() == 1){screen.displayMessageLine("Insurance payment in amount of: "+amount+" Policy Number: "+noPolis+" is successful");}
+           if(cl.printMsg() == 2){screen.displayMessageLine("Pembayaran asuransi sebesar: "+amount+" Nomor Polis: "+noPolis+" Telah berhasil");}
        }
        else {
-           screen.displayMessageLine("Saldo tidak mencukupi..");
+           if(cl.printMsg() == 1){screen.displayMessageLine("Insufficient balance..");}
+           if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi..");}
        }
     }
     
@@ -45,8 +48,8 @@ public class PembayaranAsuransi extends Transaction {
     Screen screen = getScreen(); // get reference to screen
 
       // display the prompt
-    screen.displayMessage("\nMasukan Jumlah Premi: " + 
-       "CENTS (ketik 0 untuk cancel): ");
+    if(cl.printMsg() == 1){screen.displayMessage("\nInput payment amount: " + "CENTS (or 0 to cancel): ");}
+    if(cl.printMsg() == 2){screen.displayMessage("\nMasukan Jumlah Premi: " + "SEN (ketik 0 untuk cancel): ");}
     int input = keypad.getInput(); // receive input of deposit amount
       
       // check whether the user canceled or entered a valid amount

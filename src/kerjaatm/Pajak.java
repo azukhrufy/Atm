@@ -25,23 +25,34 @@ public class Pajak extends Transaction{
    // perform transaction
    @Override
    public void execute() {
-        screen.displayMessage("\nSilahkan Masukan Kode Billing: ");
+        if(cl.printMsg() == 1){screen.displayMessage("\nInput the Billing Code: ");}
+        if(cl.printMsg() == 2){screen.displayMessage("\nSilahkan Masukan Kode Billing: ");}
         int kode_billing = keypad.getInput();
         
-        screen.displayMessage("\nSilahkan Masukan Nominal Pembayaran : ");
+        if(cl.printMsg() == 1){screen.displayMessage("\nInput the amount to pay : ");}
+        if(cl.printMsg() == 2){screen.displayMessage("\nSilahkan Masukan Nominal Pembayaran : ");}
         int amount = keypad.getInput();
         
         double available = super.getBankDatabase().getAvailableBalance(super.getAccountNumber());
                
         if(available < amount){
-            screen.displayMessageLine("Insuficient balance");
+            if(cl.printMsg() == 1){screen.displayMessageLine("Insuficient balance");}
+            if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi");}
         } else{
             super.getBankDatabase().debit(super.getAccountNumber(), amount);
     //      super.getBankDatabase().credit(accountNumber, amount);
-            screen.displayMessageLine("Pembayaran Tiket Kereta Api");
+            if(cl.printMsg() == 1){
+            screen.displayMessageLine("Tax payment menu");
+            screen.displayMessageLine("Customer ID      : " +getAccountNumber());
+            screen.displayMessageLine("Booking Code     : " +kode_billing);
+            screen.displayMessageLine("Amount           : " +amount);  
+            }
+            if(cl.printMsg() == 2){
+            screen.displayMessageLine("Menu pembayaran pajak");
             screen.displayMessageLine("ID Pelanggan     : " +getAccountNumber());
             screen.displayMessageLine("Kode Booking     : " +kode_billing);
             screen.displayMessageLine("Nominal          : " +amount);  
+            }
         }
    }
 }

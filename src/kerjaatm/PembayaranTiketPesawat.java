@@ -29,15 +29,18 @@ public class PembayaranTiketPesawat extends Transaction {
     public void execute() {
       BankDatabase bankDatabase = getBankDatabase();
       Screen screen = getScreen();
-      screen.displayMessage("Masukkan Kode Pembayaran :");
+      if(cl.printMsg() == 1){screen.displayMessage("Input payment code :");}
+      if(cl.printMsg() == 2){screen.displayMessage("Masukkan Kode Pembayaran :");}
       int kodePembayaran = keypad.getInput();
        amount = jumlahTransfer();
        if(getBankDatabase().getAvailableBalance(getAccountNumber()) > amount){
            getBankDatabase().transfer(getAccountNumber(), amount,kodePembayaran);
-           screen.displayMessageLine("Pembayaran tiket pesawat dengan kode Pembayaran "+kodePembayaran+" Telah berhasil");
+           if(cl.printMsg() == 1){screen.displayMessageLine("Payment of flight ticket with code "+kodePembayaran+" Is successful");}
+           if(cl.printMsg() == 2){screen.displayMessageLine("Pembayaran tiket pesawat dengan kode Pembayaran "+kodePembayaran+" Telah berhasil");}
        }
        else {
-           screen.displayMessageLine("Saldo tidak mencukupi..");
+           if(cl.printMsg() == 1){screen.displayMessageLine("Insufficient balance..");}
+           if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi..");}
        }
     }
     
@@ -45,8 +48,8 @@ public class PembayaranTiketPesawat extends Transaction {
     Screen screen = getScreen(); // get reference to screen
 
       // display the prompt
-    screen.displayMessage("\nMasukan Jumlah Pembayaran: " + 
-       "CENTS (ketik 0 untuk cancel): ");
+    if(cl.printMsg() == 1){screen.displayMessage("\nInput payment amount: " + "CENTS (or 0 to cancel): ");}
+    if(cl.printMsg() == 2){screen.displayMessage("\nMasukan Jumlah Pembayaran: " + "SEN (ketik 0 untuk cancel): ");}
     int input = keypad.getInput(); // receive input of deposit amount
       
       // check whether the user canceled or entered a valid amount

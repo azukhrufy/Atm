@@ -303,7 +303,10 @@ public class ATM {
       
       /* Tambahan <-------------------------*/
       Date date = new Date();
-      String strDateFormat = "yyyy/MM/dd       hh:mm:ss a";
+      String DateCL = "";
+      if(cl.printMsg() == 1){DateCL = "MM/dd/yyyy       hh:mm:ss a";}
+      if(cl.printMsg() == 2){DateCL = "dd/MM/yyyy       HH:mm:ss";}
+      String strDateFormat = DateCL;
       String dates = "hh";
       DateFormat dateFormat = new SimpleDateFormat(strDateFormat);
       DateFormat justDate = new SimpleDateFormat(dates);
@@ -410,12 +413,12 @@ public class ATM {
 //             break;
          case ANOTHER_PAYMENT :
             if (cl.printMsg() == 1) {
-            screen.displayMessageLine("ANOTHER PAYMENT");
-            screen.displayMessageLine("1 - Pulsa Listrik");
-            screen.displayMessageLine("2 - Pajak");
-            screen.displayMessageLine("3 - Tiket Kereta Api");
-            screen.displayMessageLine("4 - Pulsa");
-            screen.displayMessageLine("5 - Asuransi");
+            screen.displayMessageLine("OTHER PAYMENTS");
+            screen.displayMessageLine("1 - Electricity Bill");
+            screen.displayMessageLine("2 - Tax");
+            screen.displayMessageLine("3 - Train Ticket");
+            screen.displayMessageLine("4 - Phone Balance");
+            screen.displayMessageLine("5 - Insurance");
             screen.displayMessageLine("6 - Flight Ticket");
             screen.displayMessageLine("7 - e - Commerce");
             screen.displayMessageLine("0 - Exit\n");

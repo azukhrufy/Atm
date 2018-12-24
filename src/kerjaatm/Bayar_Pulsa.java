@@ -30,18 +30,31 @@ public class Bayar_Pulsa extends Transaction{
         int min = 0;
         String provider = null;
         if(pulsaamount == CANCELED){
-           screen.displayMessageLine("Canceling transaction...");
+           if (cl.printMsg() == 1){screen.displayMessageLine("Canceling transaction...");}
+           if (cl.printMsg() == 2){screen.displayMessageLine("Membatalkan transaksi...");}
        }
        else{
         while(provider == null){
-            screen.displayMessageLine("\nPilih Provider:");
-         screen.displayMessageLine("1 - Indosat");
-         screen.displayMessageLine("2 - Telkomsel");
-         screen.displayMessageLine("3 - XL/Axis");
-         screen.displayMessageLine("4 - 3 (Three)");
-         screen.displayMessageLine("5 - Smartfren");
-         screen.displayMessageLine("6 - Cancel transaction");
-         screen.displayMessage("\nPilihan: ");
+            if (cl.printMsg() == 1){
+                screen.displayMessageLine("\nChoose the provider:");
+                screen.displayMessageLine("1 - Indosat");
+                screen.displayMessageLine("2 - Telkomsel");
+                screen.displayMessageLine("3 - XL/Axis");
+                screen.displayMessageLine("4 - 3 (Three)");
+                screen.displayMessageLine("5 - Smartfren");
+                screen.displayMessageLine("6 - Cancel transaction");
+                screen.displayMessage("\nInput: ");
+            }
+            if (cl.printMsg() == 2){
+                screen.displayMessageLine("\nPilih Provider:");
+                screen.displayMessageLine("1 - Indosat");
+                screen.displayMessageLine("2 - Telkomsel");
+                screen.displayMessageLine("3 - XL/Axis");
+                screen.displayMessageLine("4 - 3 (Three)");
+                screen.displayMessageLine("5 - Smartfren");
+                screen.displayMessageLine("6 - Batal/kembali");
+                screen.displayMessage("\nPilihan: ");
+            }
           int input = keypad.getInput();
           switch (input) {
             case 1: 
@@ -73,8 +86,8 @@ public class Bayar_Pulsa extends Transaction{
                pulsaamount = CANCELED; // save user's choice
                break;
             default: // the user did not enter a value from 1-6
-               screen.displayMessageLine(
-                  "\nInvalid selection. Try again.");
+               if(cl.printMsg() == 1){screen.displayMessageLine("\nInvalid selection. Try again.");}
+               if(cl.printMsg() == 2){screen.displayMessageLine("\nInput tidak valid. Coba lagi");}
                break;
             } 
         }
@@ -83,12 +96,20 @@ public class Bayar_Pulsa extends Transaction{
                 amount = pulsaamount/15;
                if(super.getBankDatabase().getAvailableBalance(super.getAccountNumber())>= amount){
                    super.getBankDatabase().belipulsa(super.getAccountNumber(), amount);
-                   
+                   if(cl.printMsg() == 1){
+                   screen.displayMessageLine("Voucher bought from "+ provider + " in amount of "+pulsaamount+ " thousand success :");    
+                   int value =rand.nextInt((max - min) + 1) + min;
+                   screen.displayMessageLine("Voucher code : "+ value);
+                   screen.displayMessageLine("Recharge your phone balance by dialling : *123*[voucher code]#");
+                   screen.displayMessageLine("And then press Yes or Ok");
+                   }
+                   if(cl.printMsg() == 2){
                    screen.displayMessageLine("Pembelian Voucher "+ provider + " Sebesar "+pulsaamount+ " ribu Berhasil :");    
                    int value =rand.nextInt((max - min) + 1) + min;
                    screen.displayMessageLine("kode voucher : "+ value);
-                    screen.displayMessageLine("Lakukan pengisian pulsa dengan cara : *123*[kode voucher]#");
-                    screen.displayMessageLine("Lalu tekan Yes atau Ok");
+                   screen.displayMessageLine("Lakukan pengisian pulsa dengan cara : *123*[kode voucher]#");
+                   screen.displayMessageLine("Lalu tekan Yes atau Ok");
+                   }
                }
           } 
        }
@@ -104,14 +125,26 @@ public class Bayar_Pulsa extends Transaction{
       // loop while no valid choice has been made
       while (userChoice == 0) {
          // display the withdrawal menu
-         screen.displayMessageLine("\nWithdrawal Menu:");
+         if(cl.printMsg() == 1){
+         screen.displayMessageLine("\nMenu:");
+         screen.displayMessageLine("1 - 10 thousand");
+         screen.displayMessageLine("2 - 20 thousand");
+         screen.displayMessageLine("3 - 60 thousand");
+         screen.displayMessageLine("4 - 100 thousand");
+         screen.displayMessageLine("5 - 150 thousand");
+         screen.displayMessageLine("6 - Cancel transaction");
+         screen.displayMessage("\nChoose your desired phone balance amount: ");
+         }
+         if(cl.printMsg() == 2){
+         screen.displayMessageLine("\nMenu:");
          screen.displayMessageLine("1 - Pulsa 10 ribu");
          screen.displayMessageLine("2 - Pulsa 20 ribu");
          screen.displayMessageLine("3 - Pulsa 60 ribu");
          screen.displayMessageLine("4 - Pulsa 100 ribu");
          screen.displayMessageLine("5 - Pulsa 150 ribu");
-         screen.displayMessageLine("6 - Cancel transaction");
-         screen.displayMessage("\nChoose a withdrawal amount: ");
+         screen.displayMessageLine("6 - Batal/kembali");
+         screen.displayMessage("\nPilih jumlah pulsa yang anda inginkan: ");
+         }
 
          int inputs = keypad.getInput(); // get user input through keypad
 
@@ -136,8 +169,8 @@ public class Bayar_Pulsa extends Transaction{
                userChoice = CANCELED; // save user's choice
                break;
             default: // the user did not enter a value from 1-6
-               screen.displayMessageLine(
-                  "\nInvalid selection. Try again.");
+               if(cl.printMsg() == 1){screen.displayMessageLine("\nInvalid selection. Try again.");}
+               if(cl.printMsg() == 2){screen.displayMessageLine("\nPilihan tidak valid. Coba lagi.");}
                break;
          } 
       } 

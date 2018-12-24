@@ -33,15 +33,18 @@ public class Withdrawal extends Transaction {
    public void execute() {
       amount = displayMenuOfAmounts();
       if(amount<getBankDatabase().getAvailableBalance(getAccountNumber()) && amount != 0){
-      screen.displayMessageLine("Akun anda "+getAccountNumber()+" Berhasil di Withdraw sebesar $" + amount);
+      if(cl.printMsg() == 1){screen.displayMessageLine("Your account "+getAccountNumber()+" has withdrawn in amount of $" + amount);}
+      if(cl.printMsg() == 2){screen.displayMessageLine("Akun anda "+getAccountNumber()+" Berhasil di Withdraw sebesar $" + amount);}
       getBankDatabase().debit(getAccountNumber(),amount);
       }
       else {
           if(amount != 0){
-                            screen.displayMessageLine("Gagal Withdraw karena Balance pada Akun anda tidak mencukupi");
+                            if(cl.printMsg() == 1){screen.displayMessageLine("Failed To Withdraw Because of Your Account Balance Is Insufficient");}
+                            if(cl.printMsg() == 2){screen.displayMessageLine("Gagal Withdraw karena Balance pada Akun anda tidak mencukupi");}
                          }
           else {
-              screen.displayMessageLine("Membatalkan....");
+              if(cl.printMsg() == 1){screen.displayMessageLine("Cancelling....");}
+              if(cl.printMsg() == 2){screen.displayMessageLine("Membatalkan....");}
           }
           }
    } 
@@ -59,6 +62,7 @@ public class Withdrawal extends Transaction {
       // loop while no valid choice has been made
       while (userChoice == 99) {
          // display the withdrawal menu
+         if(cl.printMsg() == 1){
          screen.displayMessageLine("\nWithdrawal Menu:");
          screen.displayMessageLine("1 - $20");
          screen.displayMessageLine("2 - $40");
@@ -67,6 +71,18 @@ public class Withdrawal extends Transaction {
          screen.displayMessageLine("5 - $200");
          screen.displayMessageLine("6 - Cancel transaction");
          screen.displayMessage("\nChoose a withdrawal amount: ");
+         }
+         if(cl.printMsg() == 2){
+         screen.displayMessageLine("\nMenu Penarikan:");
+         screen.displayMessageLine("1 - $20");
+         screen.displayMessageLine("2 - $40");
+         screen.displayMessageLine("3 - $60");
+         screen.displayMessageLine("4 - $100");
+         screen.displayMessageLine("5 - $200");
+         screen.displayMessageLine("6 - Batal/kembali");
+         screen.displayMessage("\nPilih jumlah penarikan: ");
+         }
+
 
          int inputs = keypad.getInput(); // get user input through keypad
 
@@ -91,8 +107,10 @@ public class Withdrawal extends Transaction {
                userChoice = amounts[0]; // save user's choice
                break;
             default: // the user did not enter a value from 1-6
-               screen.displayMessageLine(
-                  "\nInvalid selection. Try again.");
+               if(cl.printMsg() == 1){screen.displayMessageLine(
+                  "\nInvalid selection. Try again.");}
+               if(cl.printMsg() == 2){screen.displayMessageLine(
+                  "\nPilihan invalid. Coba lagi.");}
                break;
          } 
       } 
