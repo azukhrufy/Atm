@@ -41,7 +41,7 @@ public class ChangeLang {
 //    }
 //    public void displayMessageEn(int lang) {
 //        if (lang == 1) {
-//            screen.displayMessage("Testttt"); //contoh comment yang bisa dipanggil
+//            screen.displayMessage("Testttt"); //contoh message yang bisa dipanggil
 //        }
 //    }
 }

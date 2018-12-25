@@ -87,6 +87,14 @@ public class BankDatabase {
        }
    }
    
+    public int getAccountNumber(int userAccountNumber) {
+        return userAccountNumber;
+    }
+    
+    public int getAccountsLength() {
+        return accounts.length;
+    }
+   
    /* Tambahan <-------------------------*/
     public void setLimit(int userAccountNumber, double amount){ getAccount(userAccountNumber).setLimit(amount); }
 

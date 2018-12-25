@@ -21,7 +21,8 @@ public class ATM {
    private DepositSlot depositSlot;
    private PembayaranEcommerce eCommerce;
    public ChangeLang cl;
-    private PembayaranKeretaApi pembayaranKA;
+   private PembayaranKeretaApi pembayaranKA;
+   private AddFavs af;
    
     private static final int Language = 1;
     private static final int Bahasa = 2;
@@ -43,7 +44,8 @@ public class ATM {
 //   private static final int TRANSFERBANYAK = 10;
    private static final int ANOTHER_PAYMENT = 5;
    private static final int HISTORY = 6;
-   private static final int EXIT = 7;
+   private static final int ADDFAV = 7;
+   private static final int EXIT = 8;
 
    // no-argument ATM constructor initializes instance variables
    public ATM() {
@@ -56,7 +58,8 @@ public class ATM {
       depositSlot = new DepositSlot();
       eCommerce = new PembayaranEcommerce();
       cl = new ChangeLang();
-        pembayaranKA = new PembayaranKeretaApi();
+      pembayaranKA = new PembayaranKeretaApi();
+      af = new AddFavs(currentAccountNumber);
    }
 
    // start ATM 
@@ -151,10 +154,11 @@ public class ATM {
     public void run_for_language() {
         boolean userExited = false;
         screen.displayMessageLine("\nWelcome | Selamat Datang");
-        screen.displayMessageLine("\nChoose your language | Pilih bahasa");
-        screen.displayMessageLine("\n1. English");
+        screen.displayMessageLine("Choose your language | Pilih bahasa");
+        screen.displayMessageLine("1. English");
         screen.displayMessageLine("2. Indonesia");
-        
+        screen.displayMessageLine("0 to exit | 0 untuk keluar");
+        screen.displayMessageLine("choose | pilih :");
         if (keypad.IsInteger()){
             int LB = keypad.getInput();
             while (!userExited) {
@@ -253,6 +257,45 @@ public class ATM {
 
                currentTransaction.execute();
                break;
+            case ADDFAV:
+                    if (cl.printMsg() == 1) {
+                        screen.displayMessageLine("Choose favorite list feature (0 to cancel)");
+                        screen.displayMessageLine("1. Add favorite account");
+                        screen.displayMessageLine("2. Delete an account from favorite list");
+                        screen.displayMessageLine("3. Display favorite accounts");
+                        screen.displayMessageLine("Your choice: ");
+                    }
+                    if (cl.printMsg() == 2) {
+                        screen.displayMessageLine("Pilih fitur daftar favorit (0 untuk kembali)");
+                        screen.displayMessageLine("1. Tambah akun favorit");
+                        screen.displayMessageLine("2. Hapus akun dari daftar favorit");
+                        screen.displayMessageLine("3. Tampilkan daftar akun favorit");
+                        screen.displayMessageLine("pilihan anda: ");
+                    }
+                    int chcc = keypad.getInput();
+                    switch (chcc) {
+                        case 1:
+                            af.addFavoriteAcc(currentAccountNumber);
+                            performTransactions();
+                            break;
+                        case 2:
+                            af.delFavoriteAcc(currentAccountNumber);
+                            performTransactions();
+                            break;
+                        case 3:
+                            af.dispFav(currentAccountNumber);
+                            performTransactions();
+                            break;
+                        case 0:
+                            performTransactions();
+                            break;
+                        default:
+                            if (cl.printMsg() == 1) {screen.displayMessageLine("\nYou did not enter a valid selection. Try again.");}
+                            if (cl.printMsg() == 2) {screen.displayMessageLine("\nPilihan yang anda masukkan tidak valid. Coba lagi");}
+                            performTransactions();
+                            mainMenuSelection = ADDFAV;
+                            break;
+                    }
             case EXIT: // user chose to terminate session
                if (cl.printMsg() == 1) {screen.displayMessageLine("\nExiting the system...");}
                if (cl.printMsg() == 2) {screen.displayMessageLine("\nMenutup sistem...");}
@@ -282,7 +325,8 @@ public class ATM {
 //      screen.displayMessageLine("10 - Transfer ke banyak account");
       screen.displayMessageLine("5 - Another Payment");
       screen.displayMessageLine("6 - Show History");
-      screen.displayMessageLine("7 - Exit\n");
+      screen.displayMessageLine("7 - Favorite account menu");
+      screen.displayMessageLine("8 - Exit\n");
        }
        if (cl.printMsg() == 2) {
             screen.displayMessageLine("\nMenu:");
@@ -298,7 +342,8 @@ public class ATM {
 //      screen.displayMessageLine("10 - Transfer ke banyak account");
         screen.displayMessageLine("5 - Pembayaran Lainnya");
         screen.displayMessageLine("6 - Tampilkan history transaksi");
-        screen.displayMessageLine("7 - Keluar\n");
+        screen.displayMessageLine("7 - Menu akun favorit");
+        screen.displayMessageLine("8 - Keluar\n");
         }
       
       /* Tambahan <-------------------------*/
