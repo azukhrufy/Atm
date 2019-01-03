@@ -5,59 +5,69 @@
  */
 package kerjaatm;
 
+import java.util.Scanner;
+
 /**
  *
  * @author user
  */
 public class PembayaranTiketPesawat extends Transaction {
-   private double amount; // amount to withdraw
-   private Keypad keypad; // reference to keypad
-
-   // constant corresponding to menu option to cancel
+   private double amount;
+   private Keypad keypad;
    private final static int CANCELED = 6;
+   private DataTiketPesawat tiketpesawat;
 
-   // Withdrawal constructor
+   
    public PembayaranTiketPesawat(int userAccountNumber, Screen atmScreen, 
-      BankDatabase atmBankDatabase, Keypad atmKeypad) {
-
-      // initialize superclass variables
-      super(userAccountNumber, atmScreen, atmBankDatabase);
-      keypad = atmKeypad;
-       }
-
-        @Override
-    public void execute() {
-      BankDatabase bankDatabase = getBankDatabase();
-      Screen screen = getScreen();
-      if(cl.printMsg() == 1){screen.displayMessage("Input payment code :");}
-      if(cl.printMsg() == 2){screen.displayMessage("Masukkan Kode Pembayaran :");}
-      int kodePembayaran = keypad.getInput();
-       amount = jumlahTransfer();
-       if(getBankDatabase().getAvailableBalance(getAccountNumber()) > amount){
-           getBankDatabase().transfer(getAccountNumber(), amount,kodePembayaran);
-           if(cl.printMsg() == 1){screen.displayMessageLine("Payment of flight ticket with code "+kodePembayaran+" Is successful");}
-           if(cl.printMsg() == 2){screen.displayMessageLine("Pembayaran tiket pesawat dengan kode Pembayaran "+kodePembayaran+" Telah berhasil");}
-       }
-       else {
-           if(cl.printMsg() == 1){screen.displayMessageLine("Insufficient balance..");}
-           if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi..");}
-       }
-    }
-    
-    private double jumlahTransfer(){
-    Screen screen = getScreen(); // get reference to screen
-
-      // display the prompt
-    if(cl.printMsg() == 1){screen.displayMessage("\nInput payment amount: " + "CENTS (or 0 to cancel): ");}
-    if(cl.printMsg() == 2){screen.displayMessage("\nMasukan Jumlah Pembayaran: " + "SEN (ketik 0 untuk cancel): ");}
-    int input = keypad.getInput(); // receive input of deposit amount
-      
-      // check whether the user canceled or entered a valid amount
-    if (input == CANCELED) {
-         return CANCELED;
-      }else {
-         return (double) input / 100; // return dollar amount
+      BankDatabase atmBankDatabase, Keypad atmKeypad, DataTiketPesawat atmTiketPesawat) 
+      {
+            super(userAccountNumber, atmScreen, atmBankDatabase);
+            keypad = atmKeypad;
+            tiketpesawat = atmTiketPesawat;
       }
-   }
-    
+
+    @Override
+    public void execute() {
+      //BankDatabase bankDatabase = getBankDatabase();
+      Screen screen = getScreen();
+      Scanner in = new Scanner(System.in);   
+      int kodePesan = 0;
+      
+      do{
+        screen.displayMessage("Masukkan kode pemesanan tiket pesawat anda :");  
+        try{
+            kodePesan = in.nextInt();
+            break;
+        }
+        catch(Exception e)
+        {
+            System.out.println("!! INPUT HANYA BOLEH ANGKA !!\n");
+            in.nextLine();
+        }
+      }while(kodePesan<100);
+      
+      if(tiketpesawat.cekKodePesan(kodePesan)){
+            amount = tiketpesawat.getJumlahBayar(kodePesan);
+            if(getBankDatabase().getAvailableBalance(getAccountNumber()) > amount)
+            {
+                getBankDatabase().debit(getAccountNumber(), amount);
+                screen.displayMessageLine("\n------------------------------------------"
+                   + "\nTRANSAKSI BERHASIL"
+                   + "\n\nPembayaran Tiket Pesawat"
+                   + "\nKode Booking        : "+kodePesan+""
+                   + "\nNama                : "+tiketpesawat.getNamaPemesan(kodePesan)+""
+                   + "\nJumlah Seat         : "+tiketpesawat.getJumlahSeat(kodePesan)+""
+                   + "\nJumlah Pembayaran   : $"+tiketpesawat.getJumlahBayar(kodePesan)+""
+                   + "\nNo Penerbangan      : "+tiketpesawat.getNoPenerbangan(kodePesan)+""
+                   + "\n\nTerimakasih telah menggunakan layanan kami"
+                   + "\n------------------------------------------\n\n");
+            } else {
+              screen.displayMessageLine("Saldo tidak mencukupi..");
+            }
+      } else {
+        screen.displayMessage("\n!!! Kode Booking Tidak Valid !!!\n"); 
+        execute();
+      }
+
+    }
 }
