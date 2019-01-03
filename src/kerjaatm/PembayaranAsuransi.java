@@ -14,17 +14,19 @@ import java.util.Scanner;
 public class PembayaranAsuransi extends Transaction {
    private double amount; // amount to withdraw
    private Keypad keypad; // reference to keypad
+   private DataAsuransi asuransi;
 
    // constant corresponding to menu option to cancel
    private final static int CANCELED = 6;
 
    // Withdrawal constructor
    public PembayaranAsuransi(int userAccountNumber, Screen atmScreen, 
-      BankDatabase atmBankDatabase, Keypad atmKeypad) {
+      BankDatabase atmBankDatabase, Keypad atmKeypad, DataAsuransi atmAsuransi) {
 
       // initialize superclass variables
       super(userAccountNumber, atmScreen, atmBankDatabase);
       keypad = atmKeypad;
+      asuransi = atmAsuransi;
         }
 
     @Override
