@@ -34,14 +34,16 @@ public class PembayaranAsuransi extends Transaction {
       int noPolis = 0;
       
       do{
-        screen.displayMessage("Masukkan nomor Polis Asuransi anda :");  
+          if(cl.printMsg() == 1){screen.displayMessage("Input your Insurance Policy number :");}
+          if(cl.printMsg() == 2){screen.displayMessage("Masukkan nomor Polis Asuransi anda :");}  
         try{
             noPolis = in.nextInt();
             break;
         }
         catch(Exception e)
         {
-            System.out.println("!! INPUT HANYA BOLEH ANGKA !!\n");
+            if(cl.printMsg() == 1){System.out.println("!! INPUT CAN ONLY BE NUMBERS !!\n");}
+            if(cl.printMsg() == 2){System.out.println("!! INPUT HANYA BOLEH ANGKA !!\n");}
             in.nextLine();
         }
       }while(noPolis<100);
@@ -51,6 +53,17 @@ public class PembayaranAsuransi extends Transaction {
             if(getBankDatabase().getAvailableBalance(getAccountNumber()) > amount)
             {
                 getBankDatabase().debit(getAccountNumber(), amount);
+                if(cl.printMsg() == 1){
+                screen.displayMessageLine("\n------------------------------------------"
+                   + "\nTRANSACTION SUCCESS"
+                   + "\n\nInsurance Payment"
+                   + "\nPolicy Number     : "+noPolis+""
+                   + "\nName            : "+asuransi.getNamaPelAsuransi(noPolis)+""
+                   + "\nPayment Amount    : $"+amount+" "
+                   + "\n\nThank you for using our service"
+                   + "\n------------------------------------------\n\n");
+                }
+                if(cl.printMsg() == 2){
                 screen.displayMessageLine("\n------------------------------------------"
                    + "\nTRANSAKSI BERHASIL"
                    + "\n\nPembayaran Asuransi"
@@ -59,11 +72,14 @@ public class PembayaranAsuransi extends Transaction {
                    + "\nJumlah Premi    : $"+amount+" "
                    + "\n\nTerimakasih telah menggunakan layanan kami"
                    + "\n------------------------------------------\n\n");
+                }
             } else {
-              screen.displayMessageLine("Saldo tidak mencukupi..");
+                if(cl.printMsg() == 1){screen.displayMessageLine("Insufficient balance..");}
+                if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi..");}
             }
       } else {
-        screen.displayMessage("\n!!! Nomor Polis tidak valid !!!\n");
+          if(cl.printMsg() == 1){screen.displayMessage("\n!!! Invalid Policy Number !!!\n");}
+          if(cl.printMsg() == 2){screen.displayMessage("\n!!! Nomor Polis tidak valid !!!\n");}
         execute();
       }
 

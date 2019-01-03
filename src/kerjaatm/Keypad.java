@@ -12,20 +12,25 @@ package kerjaatm;
 import java.util.Scanner;
 
 public class Keypad {
-   private Scanner input; // reads data from the command line
-                         
-   public Keypad() {
-      input = new Scanner(System.in);    
-   } 
+    private Scanner input; // reads data from the command line
 
-   public int getInput() {
-      return input.nextInt(); // user enters an integer
-   } 
-   
-   public boolean IsInteger() {
-       return input.hasNextInt();
-   } 
+    public Keypad() {
+        input = new Scanner(System.in);
+    }
+
+    public int getInput() {
+        return input.nextInt(); // user enters an integer
+    }
+
+    public boolean IsInteger() {
+        return input.hasNextInt();
+    }
+    
     public String getString(){
        return input.nextLine();
+    }
+    
+    public boolean isString(){
+       return input.hasNext();
     }
 }

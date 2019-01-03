@@ -34,14 +34,16 @@ public class PembayaranTiketPesawat extends Transaction {
       int kodePesan = 0;
       
       do{
-        screen.displayMessage("Masukkan kode pemesanan tiket pesawat anda :");  
+          if(cl.printMsg() == 1){screen.displayMessage("Input your flight ticket reservation code :");}
+          if(cl.printMsg() == 2){screen.displayMessage("Masukkan kode pemesanan tiket pesawat anda :");}
         try{
             kodePesan = in.nextInt();
             break;
         }
         catch(Exception e)
         {
-            System.out.println("!! INPUT HANYA BOLEH ANGKA !!\n");
+            if(cl.printMsg() == 1){System.out.println("!! INPUT CAN ONLY BE NUMBERS !!\n");}
+            if(cl.printMsg() == 2){System.out.println("!! INPUT HANYA BOLEH ANGKA !!\n");}
             in.nextLine();
         }
       }while(kodePesan<100);
@@ -51,6 +53,19 @@ public class PembayaranTiketPesawat extends Transaction {
             if(getBankDatabase().getAvailableBalance(getAccountNumber()) > amount)
             {
                 getBankDatabase().debit(getAccountNumber(), amount);
+                if(cl.printMsg() == 1){
+                screen.displayMessageLine("\n------------------------------------------"
+                   + "\nTRANSACTION SUCCESS"
+                   + "\n\nFlight Ticket Payment"
+                   + "\nBooking Code        : "+kodePesan+""
+                   + "\nName                : "+tiketpesawat.getNamaPemesan(kodePesan)+""
+                   + "\nNumber of Seats     : "+tiketpesawat.getJumlahSeat(kodePesan)+""
+                   + "\nPayment Amount      : $"+tiketpesawat.getJumlahBayar(kodePesan)+""
+                   + "\nFlight Number       : "+tiketpesawat.getNoPenerbangan(kodePesan)+""
+                   + "\n\nThank you for using our service"
+                   + "\n------------------------------------------\n\n");
+                }
+                if(cl.printMsg() == 2){
                 screen.displayMessageLine("\n------------------------------------------"
                    + "\nTRANSAKSI BERHASIL"
                    + "\n\nPembayaran Tiket Pesawat"
@@ -61,11 +76,14 @@ public class PembayaranTiketPesawat extends Transaction {
                    + "\nNo Penerbangan      : "+tiketpesawat.getNoPenerbangan(kodePesan)+""
                    + "\n\nTerimakasih telah menggunakan layanan kami"
                    + "\n------------------------------------------\n\n");
+                }
             } else {
-              screen.displayMessageLine("Saldo tidak mencukupi..");
+              if(cl.printMsg() == 1){screen.displayMessageLine("Insufficient balance..");}
+              if(cl.printMsg() == 2){screen.displayMessageLine("Saldo tidak mencukupi..");}
             }
       } else {
-        screen.displayMessage("\n!!! Kode Booking Tidak Valid !!!\n"); 
+        if(cl.printMsg() == 2){screen.displayMessage("\n!!! That Booking Code is Invalid !!!\n");} 
+        if(cl.printMsg() == 2){screen.displayMessage("\n!!! Kode Booking Tidak Valid !!!\n");} 
         execute();
       }
 
