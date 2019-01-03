@@ -20,6 +20,8 @@ public class ATM {
    private BankDatabase bankDatabase; // account information database
    private DepositSlot depositSlot;
    private PembayaranEcommerce eCommerce;
+   private DataAsuransi asuransi;
+   private DataTiketPesawat tiketpesawat;
    public ChangeLang cl;
    private PembayaranKeretaApi pembayaranKA;
    private AddFavs af;
@@ -57,6 +59,8 @@ public class ATM {
       bankDatabase = new BankDatabase();// create acct info database
       depositSlot = new DepositSlot();
       eCommerce = new PembayaranEcommerce();
+      asuransi = new DataAsuransi();
+      tiketpesawat = new DataTiketPesawat();
       cl = new ChangeLang();
       pembayaranKA = new PembayaranKeretaApi();
       af = new AddFavs(currentAccountNumber);
@@ -498,10 +502,10 @@ public class ATM {
                     temp = new Bayar_Pulsa(currentAccountNumber, screen, bankDatabase, keypad);
                     break;
                 case 5 : 
-                    temp = new PembayaranAsuransi(currentAccountNumber, screen, bankDatabase, keypad);
+                    temp = new PembayaranAsuransi(currentAccountNumber, screen, bankDatabase, keypad, asuransi);
                     break;
                 case 6 : 
-                    temp = new PembayaranTiketPesawat(currentAccountNumber, screen, bankDatabase, keypad);
+                    temp = new PembayaranTiketPesawat(currentAccountNumber, screen, bankDatabase, keypad, tiketpesawat);
                     break;
                 case 7 : 
                     temp = new EcommerceScreen(currentAccountNumber, screen, bankDatabase, keypad, cashDispenser, depositSlot, eCommerce);
