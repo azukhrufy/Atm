@@ -5,6 +5,8 @@
  */
 package kerjaatm;
 
+import java.util.Scanner;
+
 /**
  *
  * @author user
@@ -62,4 +64,3 @@ public class PembayaranAsuransi extends Transaction {
     
    
 }
-
